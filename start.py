@@ -15,7 +15,7 @@ class myThread (threading.Thread):
         tmp=0
         tmp2=1
         mpica.printl("获取收藏夹信息中...")
-        '''
+        
         while True:
             mpica.getPage(tmp2)
             mpica.allInfo.extend(mpica.allComicInfo)
@@ -25,7 +25,7 @@ class myThread (threading.Thread):
             if tmp2==mpica.pageNum:break
             else:tmp2+=1
         mpica.printl("收藏夹加载完成！")
-        '''
+        
 
 root.title("哔咔收藏夹下载") 
 root.geometry("800x560")
