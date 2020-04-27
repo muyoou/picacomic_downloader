@@ -1,10 +1,13 @@
 from tkinter import *           # 导入 Tkinter 库
-from    tkinter import ttk
+from tkinter import ttk
 import pica
 import threading
+import setbox
+
 root = Tk()                     # 创建窗口对象的背景色
 root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
+
 class myThread (threading.Thread): 
     def __init__(self,tree_date,logT):
         threading.Thread.__init__(self)
@@ -15,7 +18,7 @@ class myThread (threading.Thread):
         tmp=0
         tmp2=1
         mpica.printl("获取收藏夹信息中...")
-        
+        '''
         while True:
             mpica.getPage(tmp2)
             mpica.allInfo.extend(mpica.allComicInfo)
@@ -25,13 +28,12 @@ class myThread (threading.Thread):
             if tmp2==mpica.pageNum:break
             else:tmp2+=1
         mpica.printl("收藏夹加载完成！")
+        '''
         
-
 root.title("哔咔收藏夹下载") 
 root.geometry("800x560")
 menu = Menu(root)
 root.config(menu=menu)
-
 
 filemenu = Menu(menu, tearoff=0)
 menu.add_cascade(label="File", menu=filemenu)
@@ -65,9 +67,6 @@ tree_date.column('pagesCount',width=30)
 tree_date.column('epsCount',width=30)
 tree_date.column('likesCount',width=30)
 tree_date.column('download',width=50)
-
-
-
 # 添加列名
 tree_date.heading('name',text='名称')
 tree_date.heading('creater',text='作者')
@@ -75,19 +74,17 @@ tree_date.heading('pagesCount',text='页数')
 tree_date.heading('epsCount',text='章节数')
 tree_date.heading('likesCount',text='点赞数')
 tree_date.heading('download',text='状态')
-
-
-
-
-
 # 给表格中添加数据
 pageBar=Frame(root)
 pageBar.place(relwidth=1,height=160,relx=1,rely=1,anchor="se")
 logT=Text(pageBar,bg="black",fg="white")
 logT.place(relwidth=1,height=150,relx=1,rely=1,anchor="se")
 
+setbox=setbox.setbox(root)
+
 
 thread1=myThread(tree_date,logT)
 thread1.start()
+
 
 root.mainloop()

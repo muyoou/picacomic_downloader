@@ -60,8 +60,8 @@ class mrequest():
                         try:
                             r = requests.get(nurl,headers=headers,verify=False,stream=True)
                         except requests.exceptions.ConnectionError:
-                            print("连接超时");
-                            continue;
+                            print("连接超时")
+                            continue
                         if r.status_code == 200:
                              open(payload, 'wb').write(r.content)
                              break

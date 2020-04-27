@@ -1,7 +1,7 @@
 import d
 import json
 import post
-import os
+import fileManager
 import time
 
 class pica():
@@ -32,15 +32,6 @@ class pica():
         S.printl("登录用户:"+d.Email)
         S.printl("图片下载质量:"+d.Image_quality)
         S.printl("代理设置:"+d.Proxy)
-        
-
-    def mkdir(self,path):
-        isExists=os.path.exists(path)
-        if not isExists:
-            os.makedirs(path) 
-            return True
-        else:
-            return False
 
     def isNone(self,input,other):
         if(not input):return other
@@ -80,7 +71,7 @@ class pica():
 
     def getEpsPic(self):
         self.saveRootPath=self.getComicSavePath()
-        self.mkdir(self.saveRootPath)
+        fileManager.mkdir(self.saveRootPath)
         self.temID=1
         while True:
             self.allCPageInfo=self.getCPage()
@@ -124,7 +115,7 @@ class pica():
                                         S.cPageInfo=S.getCPage(temppage)
                                         total=S.cPageInfo['total']
                                         savepath=S.getComicSavePath(S.comicInfo,S.epsInfo,S.index);
-                                        if not (S.mkdir(savepath) or (temppage!=1)) : break
+                                        if not (fileManager.mkdir(savepath) or (temppage!=1)) : break
                                         picnum=(temppage-1)*40+1
                                         for picture in S.cPageInfo['docs']:
                                                 print('-下载 '+str(picnum)+'/'+str(total)+' -- '+str(picture['media']['originalName']))
