@@ -1,40 +1,48 @@
-from tkinter import *           # 导入 Tkinter 库
+from tkinter import * 
 from tkinter import ttk
 import pica
 import threading
 import event
 
-root = Tk()                     # 创建窗口对象的背景色
+root = Tk()
 root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
+mypica=None
 
 class myThread (threading.Thread): 
-    def __init__(self,tree_date,event):
+    def __init__(self,tree_date,mypica):
         threading.Thread.__init__(self)
         self.tree_date=tree_date
-        self.event=event
+        self.mpica=mypica
     def run(self):
-        mpica=pica.pica(self.event)
-        if mpica.login() is 1:
+        if self.mpica.login() is 1:
             input("error")
         tmp=0
         tmp2=1
         event.printl("获取收藏夹信息中...")
         while True:
-            mpica.getPage(tmp2)
-            mpica.allInfo.extend(mpica.allComicInfo)
-            for item in mpica.allComicInfo:
+            self.mpica.getPage(tmp2)
+            self.mpica.allInfo.extend(self.mpica.allComicInfo)
+            for item in self.mpica.allComicInfo:
                 self.tree_date.insert('',tmp,values=(item.get('title',''),item.get('author',''),item.get('likesCount',''),item.get('pagesCount',''),item.get('epsCount','')))
                 tmp+=1
-            if tmp2==mpica.pageNum:break
+            if tmp2==self.mpica.pageNum:break
             else:tmp2+=1
         event.printl("收藏夹加载完成！")
         
-        
+class downThread (threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+    def run(self):
+        print()
 
 
 def huoqu():
-    thread1=myThread(tree_date,event)
+    thread1=myThread(tree_date,mypica)
+    thread1.start()
+
+def download():
+    thread1=downThread()
     thread1.start()
 
 root.title("哔咔收藏夹下载") 
@@ -52,7 +60,7 @@ helpmenu.add_command(label="About...")
  
 toolBar = Frame(root).place(relwidth=1,x=0,y=0)
 Button(toolBar,text="获取",borderwidth=0,activeforeground="SkyBlue",command=huoqu).place(x=0,y=0,height=35,width=50)
-Button(toolBar,text="开始下载",borderwidth=0,activeforeground="SkyBlue").place(x=55,y=0,height=35,width=50)
+Button(toolBar,text="开始下载",borderwidth=0,activeforeground="SkyBlue",command=download).place(x=55,y=0,height=35,width=50)
 Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",command=event.openfolder).place(x=120,y=0,height=35,width=60)
 Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",command=event.openMenu).place(x=190,y=0,height=35,width=50)
 Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue").place(relx=1,y=0,height=35,width=50,anchor="ne")
@@ -93,9 +101,8 @@ event.printl("下载程序初始化")
 event.printl("v 1.0.0   BY MUYOO")
 event.checkConfig()
 event.printl("配置完成")
+mypica=pica.pica(event)
 event.printl("请点击左上角[获取]开始打印收藏夹！")
-
-
 
 
 root.mainloop()
