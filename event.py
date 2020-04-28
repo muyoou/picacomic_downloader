@@ -1,6 +1,7 @@
 import d
 import fileManager
 import setbox
+
 log=None
 root=None
 def printl(text):
@@ -38,3 +39,4 @@ def checkConfig():
         printl("初次配置")
         openMenu()
         printConfig()
+

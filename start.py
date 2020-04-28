@@ -9,18 +9,17 @@ root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
 
 class myThread (threading.Thread): 
-    def __init__(self,tree_date,logT):
+    def __init__(self,tree_date,event):
         threading.Thread.__init__(self)
         self.tree_date=tree_date
-        self.log=logT
+        self.event=event
     def run(self):
-        mpica=pica.pica(self.log)
+        mpica=pica.pica(self.event)
         if mpica.login() is 1:
-            mpica.printl("用户名或密码错误！请重新输入")
+            input("error")
         tmp=0
         tmp2=1
-        mpica.printl("获取收藏夹信息中...")
-        
+        event.printl("获取收藏夹信息中...")
         while True:
             mpica.getPage(tmp2)
             mpica.allInfo.extend(mpica.allComicInfo)
@@ -29,13 +28,13 @@ class myThread (threading.Thread):
                 tmp+=1
             if tmp2==mpica.pageNum:break
             else:tmp2+=1
-        mpica.printl("收藏夹加载完成！")
+        event.printl("收藏夹加载完成！")
         
         
 
 
 def huoqu():
-    thread1=myThread(tree_date,logT)
+    thread1=myThread(tree_date,event)
     thread1.start()
 
 root.title("哔咔收藏夹下载") 

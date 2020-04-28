@@ -52,7 +52,7 @@ class mrequest():
                              print('尝试重新连接中。。。')
                              time.sleep(3)
                              getnum+=1
-                             if getnum>8 :break
+                             if getnum>3 :return -1
             else:
                     getnum=0
                     headers.pop("Content-Type")

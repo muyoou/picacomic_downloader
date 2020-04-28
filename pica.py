@@ -6,10 +6,8 @@ import time
 
 class pica():
 
-    def __init__(S,log):
-        S.log=log
-        S.printl("下载程序启动")
-        S.printl("v 1.0.0   BY MUYOO")
+    def __init__(S,event):
+        S.event=event
         S.mrp=post.mrequest()
         S.allInfo = []
         S.allComicInfo = None
@@ -24,24 +22,44 @@ class pica():
         S.temID = 0
         S.saveRootPath = None
         S.savePath = None
-        S.printl("初始化完成")
-        S.printl("登录用户:"+d.Email)
-        S.printl("图片下载质量:"+d.Image_quality)
-        S.printl("代理设置:"+d.Proxy)
+        S.event.printl("初始化完成")
 
     def login(self):
+        self.event.printl("开始登录")
+        if self.loginByFile()!=0:
+            self.loginByWeb()
+
+    def loginByFile(self):
         if fileManager.isExist(".\\data\\token.dat"):
+            self.event.printl('使用token登录')
             self.mytoken=fileManager.readToken()
+            self.event.printl("已获取token，尝试登陆中...")
             print (self.mytoken)
-            return self.mytoken
+            return self.testConn()
+        else: return 1
+
+
+    def loginByWeb(self):
+        self.event.printl('尝试使用密码登录中...')
         output=self.mrp.sendPost("auth/sign-in",{"email":d.Email,"password":d.Password},"POST").json()
         print(output)
         if output['message'] == 'invalid email or password':
+            self.event.printl("用户名或密码错误！请在设置中更改")
             return 1
         else:
+            self.event.printl("登录成功！")
             self.mytoken=str(output['data']['token'])
             fileManager.creatTokenFile(self.mytoken)
-            return self.mytoken
+            self.event.printl("token已保存")
+            return 0
+
+    def testConn(self):
+        if self.mrp.sendPost("categories",None,"GET",self.mytoken) == -1:
+            self.event.printl("登录超时！")
+            return -1
+        else:
+            self.event.printl("登录成功！")
+            return 0
 
     def isNone(self,input,other):
         if(not input):return other
@@ -53,7 +71,7 @@ class pica():
         if self.pageNum==-1:
             self.pageNum=int(tmp['pages'])
         self.allComicInfo = tmp['docs']
-        self.printl("已完成%d/%d"%(index,self.pageNum))
+        self.event.printl("已完成%d/%d"%(index,self.pageNum))
 
     def getComicEps(self,comicid=None):
         comicid=self.isNone(comicid,self.comicInfo['_id'])
@@ -140,7 +158,3 @@ class pica():
                        time.sleep(3)
                 print('\n\n这一页下载完成\n\n')
                 time.sleep(3)
-
-    def printl(self,text):
-        self.log.insert('end',text+'\n')
-        self.log.see('end')
