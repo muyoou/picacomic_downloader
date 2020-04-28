@@ -24,3 +24,10 @@ def readConfig():
     with open('.\\data\\config.json', 'r',encoding='utf-8') as f:
         data = json.load(f)
         return data
+
+def creatTokenFile(input):
+    with open('.\\data\\token.dat', 'w') as f:
+        f.write(input)
+
+def readToken():
+    return open(".\\data\\token.dat", "r+").readline()

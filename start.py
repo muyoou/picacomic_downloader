@@ -2,9 +2,7 @@ from tkinter import *           # 导入 Tkinter 库
 from tkinter import ttk
 import pica
 import threading
-import setbox
-import fileManager
-import d
+import event
 
 root = Tk()                     # 创建窗口对象的背景色
 root.iconbitmap(".\\icon\\favicon.ico")
@@ -22,7 +20,7 @@ class myThread (threading.Thread):
         tmp=0
         tmp2=1
         mpica.printl("获取收藏夹信息中...")
-        '''
+        
         while True:
             mpica.getPage(tmp2)
             mpica.allInfo.extend(mpica.allComicInfo)
@@ -32,10 +30,9 @@ class myThread (threading.Thread):
             if tmp2==mpica.pageNum:break
             else:tmp2+=1
         mpica.printl("收藏夹加载完成！")
-        '''
         
-def openFile2():
-    fileManager.openFile(".\\comic")
+        
+
 
 def huoqu():
     thread1=myThread(tree_date,logT)
@@ -57,8 +54,8 @@ helpmenu.add_command(label="About...")
 toolBar = Frame(root).place(relwidth=1,x=0,y=0)
 Button(toolBar,text="获取",borderwidth=0,activeforeground="SkyBlue",command=huoqu).place(x=0,y=0,height=35,width=50)
 Button(toolBar,text="开始下载",borderwidth=0,activeforeground="SkyBlue").place(x=55,y=0,height=35,width=50)
-Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",command=openFile2).place(x=120,y=0,height=35,width=60)
-Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue").place(x=190,y=0,height=35,width=50)
+Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",command=event.openfolder).place(x=120,y=0,height=35,width=60)
+Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",command=event.openMenu).place(x=190,y=0,height=35,width=50)
 Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue").place(relx=1,y=0,height=35,width=50,anchor="ne")
 sb = Scrollbar(root)
 table=Frame(root).place(relwidth=1,x=0,y=35)
@@ -91,13 +88,15 @@ pageBar.place(relwidth=1,height=160,relx=1,rely=1,anchor="se")
 logT=Text(pageBar,bg="black",fg="white")
 logT.place(relwidth=1,height=150,relx=1,rely=1,anchor="se")
 
-if fileManager.isExist(".\\data\\config.json"):
-    data=fileManager.readConfig()
-    d.Email=data['user']
-    d.Password=data['password']
-    d.Proxy=data['proxy']
-    d.Image_quality=data['quality']
-else:
-    setbox=setbox.setbox(root)
+event.log=logT
+event.root=root
+event.printl("下载程序初始化")
+event.printl("v 1.0.0   BY MUYOO")
+event.checkConfig()
+event.printl("配置完成")
+event.printl("请点击左上角[获取]开始打印收藏夹！")
+
+
+
 
 root.mainloop()

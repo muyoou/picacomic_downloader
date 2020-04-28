@@ -31,7 +31,7 @@ class pica():
 
     def login(self):
         if fileManager.isExist(".\\data\\token.dat"):
-            self.mytoken=open(".\\data\\token.dat", "r+").readline()
+            self.mytoken=fileManager.readToken()
             print (self.mytoken)
             return self.mytoken
         output=self.mrp.sendPost("auth/sign-in",{"email":d.Email,"password":d.Password},"POST").json()
@@ -40,6 +40,7 @@ class pica():
             return 1
         else:
             self.mytoken=str(output['data']['token'])
+            fileManager.creatTokenFile(self.mytoken)
             return self.mytoken
 
     def isNone(self,input,other):
