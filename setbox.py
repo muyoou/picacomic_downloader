@@ -37,6 +37,11 @@ class setbox ():
         if(data['user'] is '' or data['password'] is ''):
             tkinter.messagebox.showinfo(title='提示', message='请填写哔咔的用户名或密码')
         else:
+            fileManager.mkdir(".\\comic")
             fileManager.createJsonFile(data)
+            d.Email=data['user']
+            d.Password=data['password']
+            d.Proxy=data['proxy']
+            d.Image_quality=data['quality']
             self.t2.destroy()
         

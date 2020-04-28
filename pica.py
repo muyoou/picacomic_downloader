@@ -11,10 +11,6 @@ class pica():
         S.printl("下载程序启动")
         S.printl("v 1.0.0   BY MUYOO")
         S.mrp=post.mrequest()
-        S.mytoken='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmE5ZmFjMjFkYzM3YTY1NDk2ZTZhN2IiLCJlbWFpbCI6Im11eW9vIiwicm9sZSI6Im1lbWJlciIsIm5hbWUiOiJtdXlvbyIsInZlcnNpb24iOiIyLjIuMS4zLjMuNCIsImJ1aWxkVmVyc2lvbiI6IjQ1IiwicGxhdGZvcm0iOiJhbmRyb2lkIiwiaWF0IjoxNTg3OTczOTc0LCJleHAiOjE1ODg1Nzg3NzR9.Y_82vsuXloxDgBubns6dWMk8VRs8nXjnrDg7_uJFy4c'
-        S.printl("尝试使用保存token登录")
-        #S.mytoken=str(S.mrp.sendPost("auth/sign-in",{"email":d.Email,"password":d.Password},"POST").json()['data']['token'])
-        print(S.mytoken)
         S.allInfo = []
         S.allComicInfo = None
         S.comicInfo= None
@@ -32,6 +28,19 @@ class pica():
         S.printl("登录用户:"+d.Email)
         S.printl("图片下载质量:"+d.Image_quality)
         S.printl("代理设置:"+d.Proxy)
+
+    def login(self):
+        if fileManager.isExist(".\\data\\token.dat"):
+            self.mytoken=open(".\\data\\token.dat", "r+").readline()
+            print (self.mytoken)
+            return self.mytoken
+        output=self.mrp.sendPost("auth/sign-in",{"email":d.Email,"password":d.Password},"POST").json()
+        print(output)
+        if output['message'] == 'invalid email or password':
+            return 1
+        else:
+            self.mytoken=str(output['data']['token'])
+            return self.mytoken
 
     def isNone(self,input,other):
         if(not input):return other

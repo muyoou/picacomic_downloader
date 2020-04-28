@@ -3,6 +3,8 @@ from tkinter import ttk
 import pica
 import threading
 import setbox
+import fileManager
+import d
 
 root = Tk()                     # 创建窗口对象的背景色
 root.iconbitmap(".\\icon\\favicon.ico")
@@ -15,6 +17,8 @@ class myThread (threading.Thread):
         self.log=logT
     def run(self):
         mpica=pica.pica(self.log)
+        if mpica.login() is 1:
+            mpica.printl("用户名或密码错误！请重新输入")
         tmp=0
         tmp2=1
         mpica.printl("获取收藏夹信息中...")
@@ -30,11 +34,17 @@ class myThread (threading.Thread):
         mpica.printl("收藏夹加载完成！")
         '''
         
+def openFile2():
+    fileManager.openFile(".\\comic")
+
+def huoqu():
+    thread1=myThread(tree_date,logT)
+    thread1.start()
+
 root.title("哔咔收藏夹下载") 
 root.geometry("800x560")
 menu = Menu(root)
 root.config(menu=menu)
-
 filemenu = Menu(menu, tearoff=0)
 menu.add_cascade(label="File", menu=filemenu)
 filemenu.add_command(label="New")
@@ -45,9 +55,10 @@ menu.add_cascade(label="Help", menu=helpmenu)
 helpmenu.add_command(label="About...")
  
 toolBar = Frame(root).place(relwidth=1,x=0,y=0)
-Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue").place(x=0,y=0,height=35,width=50)
+Button(toolBar,text="获取",borderwidth=0,activeforeground="SkyBlue",command=huoqu).place(x=0,y=0,height=35,width=50)
 Button(toolBar,text="开始下载",borderwidth=0,activeforeground="SkyBlue").place(x=55,y=0,height=35,width=50)
-Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue").place(x=110,y=0,height=35,width=50)
+Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",command=openFile2).place(x=120,y=0,height=35,width=60)
+Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue").place(x=190,y=0,height=35,width=50)
 Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue").place(relx=1,y=0,height=35,width=50,anchor="ne")
 sb = Scrollbar(root)
 table=Frame(root).place(relwidth=1,x=0,y=35)
@@ -80,11 +91,13 @@ pageBar.place(relwidth=1,height=160,relx=1,rely=1,anchor="se")
 logT=Text(pageBar,bg="black",fg="white")
 logT.place(relwidth=1,height=150,relx=1,rely=1,anchor="se")
 
-setbox=setbox.setbox(root)
-
-
-thread1=myThread(tree_date,logT)
-thread1.start()
-
+if fileManager.isExist(".\\data\\config.json"):
+    data=fileManager.readConfig()
+    d.Email=data['user']
+    d.Password=data['password']
+    d.Proxy=data['proxy']
+    d.Image_quality=data['quality']
+else:
+    setbox=setbox.setbox(root)
 
 root.mainloop()

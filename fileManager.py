@@ -10,5 +10,17 @@ def mkdir(path):
         return False
 
 def createJsonFile(input):
-    with open('config.json','w',encoding='utf-8') as f:
+    mkdir(".\\data")
+    with open('.\\data\\config.json','w',encoding='utf-8') as f:
         json.dump(input,f,ensure_ascii=False)
+
+def openFile(input):
+    os.startfile(input)
+
+def isExist(input):
+    return os.path.exists(input)
+
+def readConfig():
+    with open('.\\data\\config.json', 'r',encoding='utf-8') as f:
+        data = json.load(f)
+        return data
