@@ -4,6 +4,7 @@ import setbox
 
 log=None
 root=None
+page=None
 def printl(text):
     log.insert('end',text+'\n')
     log.see('end')
@@ -46,6 +47,24 @@ def checkConfig():
     if fileManager.isExist('.\\data\\downloaded.json'):
         setDownloaded()
     else:
-        fileManager.createNewFile('.\\data\\downloaded.json')
+        fileManager.createJsonFile([],'downloaded.json')
 
+def isDownloaded(input):
+    if input in d.Downloaded:
+        return True
+    else: return False
 
+def setPage(nowp,allp):
+    d.nowPage=nowp
+    d.AllPage=allp
+    page.set("第%d页，共%d页"%(nowp,allp))
+
+def getNowPage():
+    return d.nowPage
+
+def getAllPage():
+    return d.AllPage
+
+def setNowPage(nowp):
+    d.nowPage=nowp
+    page.set("第%d页，共%d页"%(nowp,d.AllPage))

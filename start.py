@@ -8,27 +8,33 @@ root = Tk()
 root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
 mypica=None
+        
 
 class myThread (threading.Thread): 
-    def __init__(self,tree_date,mypica):
+    def __init__(self,tree_date,mypica,page):
         threading.Thread.__init__(self)
         self.tree_date=tree_date
         self.mpica=mypica
+        self.page=page
+
     def run(self):
         if self.mpica.login() is 1:
             input("error")
+        delList=self.tree_date.get_children()
+        for item in delList:
+            self.tree_date.delete(item)
         tmp=0
-        tmp2=1
+        #tmp2=1
         event.printl("获取收藏夹信息中...")
-        while True:
-            self.mpica.getPage(tmp2)
-            self.mpica.allInfo.extend(self.mpica.allComicInfo)
-            for item in self.mpica.allComicInfo:
-                self.tree_date.insert('',tmp,values=(item.get('title',''),item.get('author',''),item.get('likesCount',''),item.get('pagesCount',''),item.get('epsCount','')))
-                tmp+=1
-            if tmp2==self.mpica.pageNum:break
-            else:tmp2+=1
-            break
+        #while True:
+        self.mpica.getPage(self.page)
+        #self.mpica.allInfo.extend(self.mpica.allComicInfo)
+        for item in self.mpica.allComicInfo:
+            self.tree_date.insert('',tmp,values=(item.get('title',''),item.get('author',''),item.get('likesCount',''),item.get('pagesCount',''),item.get('epsCount',''),'已下载'if item['download']else '未下载'))
+            tmp+=1
+        #if tmp2==self.mpica.pageNum:break
+        #else:tmp2+=1
+        #    break
         event.printl("收藏夹加载完成！")
         
 class downThread (threading.Thread):
@@ -41,9 +47,21 @@ class downThread (threading.Thread):
             print(self.tree_date.item(item,"values"))
 
 
-def huoqu():
-    thread1=myThread(tree_date,mypica)
+def huoqu(index=0):
+    if index!=0:
+        event.setNowPage(index)
+    thread1=myThread(tree_date,mypica,event.getNowPage())
     thread1.start()
+
+def nextPage():
+    tem=event.getNowPage()
+    if(tem<event.getAllPage()):
+        huoqu(tem+1)
+
+def previousPage():
+    tem=event.getNowPage()
+    if(tem>1):
+        huoqu(tem-1)
 
 def download():
     thread1=downThread(tree_date,mypica)
@@ -63,20 +81,26 @@ menu.add_cascade(label="Help", menu=helpmenu)
 helpmenu.add_command(label="About...")
  
 toolBar = Frame(root).place(relwidth=1,x=0,y=0)
-Button(toolBar,text="获取",borderwidth=0,activeforeground="SkyBlue",command=huoqu).place(x=0,y=0,height=35,width=50)
-Button(toolBar,text="开始下载",borderwidth=0,activeforeground="SkyBlue",command=download).place(x=55,y=0,height=35,width=50)
+Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",command=huoqu).place(x=0,y=0,height=35,width=50)
+Button(toolBar,text="下载全部",borderwidth=0,activeforeground="SkyBlue",command=download).place(x=55,y=0,height=35,width=50)
 Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",command=event.openfolder).place(x=120,y=0,height=35,width=60)
 Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",command=event.openMenu).place(x=190,y=0,height=35,width=50)
 Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue").place(relx=1,y=0,height=35,width=50,anchor="ne")
+Button(root,text="上一页",borderwidth=0,activeforeground="SkyBlue",command=previousPage).place(x=20,y=355)
+Button(root,text="下一页",borderwidth=0,activeforeground="SkyBlue",command=nextPage).place(x=180,y=355)
+PageT=StringVar()
+PageT.set("第 页，共 页")
+PageL=Label(root,textvariable=PageT)
+PageL.place(x=80,y=358)
 sb = Scrollbar(root)
 table=Frame(root).place(relwidth=1,x=0,y=35)
 
 tree_date = ttk.Treeview(table,show="headings",yscrollcommand= sb.set)
 sb.config(command=tree_date.yview)
-sb.place(relx=1,y=35,anchor="ne",width=20,height=340)
+sb.place(relx=1,y=35,anchor="ne",width=20,height=320)
 # 定义列
 tree_date['columns'] = ['name','creater','likesCount','pagesCount','epsCount',"download"]
-tree_date.place(x=0,y=35,width=780,height=340)
+tree_date.place(x=0,y=35,width=780,height=320)
 
 
 # 设置列宽度
@@ -101,12 +125,12 @@ logT.place(relwidth=1,height=150,relx=1,rely=1,anchor="se")
 
 event.log=logT
 event.root=root
+event.page=PageT
 event.printl("下载程序初始化")
 event.printl("v 1.0.0   BY MUYOO")
 event.checkConfig()
 event.printl("配置完成")
 mypica=pica.pica(event)
-event.printl("请点击左上角[获取]开始打印收藏夹！")
-
+huoqu(1)
 
 root.mainloop()

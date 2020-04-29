@@ -48,11 +48,10 @@ class pica():
     #使用保存的token文件登录
     def loginByFile(self):
         if fileManager.isExist(".\\data\\token.dat"):
-            self.event.printl('使用token登录')
             self.mytoken=fileManager.readToken()
-            self.event.printl("已获取token，尝试登陆中...")
             print (self.mytoken)
-            return self.testConn()
+            #return self.testConn()
+            return 0
         else: return 1
 
     #使用密码登录，并保存token
@@ -91,7 +90,13 @@ class pica():
         if self.pageNum==-1:
             self.pageNum=int(tmp['pages'])
         self.allComicInfo = tmp['docs']
-        self.event.printl("已完成%d/%d"%(index,self.pageNum))
+        for item in self.allComicInfo:
+            if self.event.isDownloaded(item['_id']):
+                item['download']=True
+            else:
+                item['download']=False
+        self.event.setPage(index,self.pageNum)
+        self.event.printl("第%d页加载完成"%(index))
 
     #获取一个漫画的章节列表
     #可以通过comicid获取，也可以直接使用当前的漫画号

@@ -9,9 +9,9 @@ def mkdir(path):
     else:
         return False
 
-def createJsonFile(input):
+def createJsonFile(input,name):
     mkdir(".\\data")
-    with open('.\\data\\config.json','w',encoding='utf-8') as f:
+    with open('.\\data\\'+name,'w',encoding='utf-8') as f:
         json.dump(input,f,ensure_ascii=False)
 
 def openFile(input):
