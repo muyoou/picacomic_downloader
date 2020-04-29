@@ -124,8 +124,8 @@ class pica():
     def get40Pic(self):
         picnum=(self.temID-1)*40+1
         for picture in self.allCPageInfo['docs']:
-            print('-下载 '+str(picnum)+'/'+str(self.allCPageInfo['total'])+' -- '+str(picture['media']['originalName']))
-            #pic=self.getPic(picture['media'],self.getPicSavePath(self.saveRootPath,picnum,picture['media']))
+            self.event.printl('-下载 '+str(picnum)+'/'+str(self.allCPageInfo['total'])+' -- '+str(picture['media']['originalName']))
+            self.getPic(picture['media'],self.getPicSavePath(self.saveRootPath,picnum,picture['media']))
             picnum+=1
 
     #直接下载一个章节中的所有图片
@@ -144,19 +144,21 @@ class pica():
         comic=self.isNone(comic,self.comicInfo)
         eps=self.isNone(eps,self.epsInfo)
         id=self.isNone(id,self.index)
-        return "./comic/"+str(id)+'_'+str(comic['title'])+"/"+str(eps['title']);
+        return "./comic/"+str(id)+'_'+str(comic['title'])+"/"+str(eps['title'])
 
     #直接下载一个漫画中的所有图片
     def getComicPic(self):
         for self.epsInfo in self.allEpsInfo:
             self.epsID=self.epsInfo["order"]
             self.getEpsPic()
+        fileManager.addDownloaded(self.comicInfo['_id'])
 
-    #下载已经获取到得全部漫画
-    def getAllComicPic(self):
-        self.index=1
-        
-    
+    #下载当前页的漫画
+    def getNowPagePic(self):
+        for self.comicInfo in self.allComicInfo:
+            d.Downloading=self.comicInfo['_id']
+            self.allEpsInfo=self.getComicEps()
+            self.getComicPic()
 
     #示例：下载第一页的第一个漫画
     def start2(S):

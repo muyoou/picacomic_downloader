@@ -5,6 +5,7 @@ import requests
 import urllib3
 import json
 import d
+import fileManager
 urllib3.disable_warnings()
 
 class mrequest():
@@ -63,7 +64,7 @@ class mrequest():
                             print("连接超时")
                             continue
                         if r.status_code == 200:
-                             open(payload, 'wb').write(r.content)
+                             fileManager.saveImg(payload,r.content)
                              break
                         else:
                              time.sleep(3)

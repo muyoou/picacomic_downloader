@@ -37,6 +37,17 @@ def readDownloaded():
         data = json.load(f)
         return data
 
+def addDownloaded(input):
+    data=readDownloaded()
+    data+=input
+    with open('.\\data\\downloaded.json', 'w') as f:
+        json.dump(input,f,ensure_ascii=False)
+
+
 def createNewFile(filename):
     fd = open(filename, mode="w", encoding="utf-8")
     fd.close()
+
+def saveImg(img,path):
+    if not isExist(path):
+        open(path, 'wb').write(img)
