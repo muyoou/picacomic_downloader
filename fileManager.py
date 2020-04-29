@@ -31,3 +31,12 @@ def creatTokenFile(input):
 
 def readToken():
     return open(".\\data\\token.dat", "r+").readline()
+
+def readDownloaded():
+    with open('.\\data\\downloaded.json', 'r',encoding='utf-8') as f:
+        data = json.load(f)
+        return data
+
+def createNewFile(filename):
+    fd = open(filename, mode="w", encoding="utf-8")
+    fd.close()

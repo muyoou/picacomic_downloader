@@ -17,6 +17,9 @@ def setConfig(data):
 def getConfigByFile():
     setConfig(fileManager.readConfig())
 
+def setDownloaded():
+    d.Downloaded=fileManager.readDownloaded()
+
 def printConfig():
     printl("----------------------")
     printl("用户名："+d.Email)
@@ -32,11 +35,17 @@ def openMenu():
 
 def checkConfig():
     if fileManager.isExist(".\\data\\config.json"):
-        printl("读取配置文件")
+        printl("加载配置文件")
         getConfigByFile()
         printConfig()
     else:
         printl("初次配置")
         openMenu()
         printConfig()
+    printl("加载日志")
+    if fileManager.isExist('.\\data\\downloaded.json'):
+        setDownloaded()
+    else:
+        fileManager.createNewFile('.\\data\\downloaded.json')
+
 

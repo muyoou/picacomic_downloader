@@ -28,13 +28,17 @@ class myThread (threading.Thread):
                 tmp+=1
             if tmp2==self.mpica.pageNum:break
             else:tmp2+=1
+            break
         event.printl("收藏夹加载完成！")
         
 class downThread (threading.Thread):
-    def __init__(self):
+    def __init__(self,tree_date,mypica):
         threading.Thread.__init__(self)
+        self.tree_date=tree_date
+        self.mpica=mypica
     def run(self):
-        print()
+        for item in self.tree_date.get_children():
+            print(self.tree_date.item(item,"values"))
 
 
 def huoqu():
@@ -42,7 +46,7 @@ def huoqu():
     thread1.start()
 
 def download():
-    thread1=downThread()
+    thread1=downThread(tree_date,mypica)
     thread1.start()
 
 root.title("哔咔收藏夹下载") 

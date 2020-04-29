@@ -147,6 +147,12 @@ class pica():
             self.epsID=self.epsInfo["order"]
             self.getEpsPic()
 
+    #下载已经获取到得全部漫画
+    def getAllComicPic(self):
+        self.index=1
+        
+    
+
     #示例：下载第一页的第一个漫画
     def start2(S):
         S.index=1
