@@ -1,33 +1,11 @@
 from tkinter import * 
 from tkinter import ttk
-import pica
-import thread
 import event
+
 
 root = Tk()
 root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
-mypica=None
-
-def huoqu(index=0):
-    if index!=0:
-        event.setNowPage(index)
-    thread1=thread.myThread(tree_date,mypica,event)
-    thread1.start()
-
-def nextPage():
-    tem=event.getNowPage()
-    if(tem<event.getAllPage()):
-        huoqu(tem+1)
-
-def previousPage():
-    tem=event.getNowPage()
-    if(tem>1):
-        huoqu(tem-1)
-
-def download():
-    thread1=thread.downThread(tree_date,mypica,event)
-    thread1.start()
 
 root.title("哔咔收藏夹下载") 
 root.geometry("800x560")
@@ -43,13 +21,13 @@ menu.add_cascade(label="Help", menu=helpmenu)
 helpmenu.add_command(label="About...")
  
 toolBar = Frame(root).place(relwidth=1,x=0,y=0)
-Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",command=huoqu).place(x=0,y=0,height=35,width=50)
-Button(toolBar,text="下载此页",borderwidth=0,activeforeground="SkyBlue",command=download).place(x=55,y=0,height=35,width=50)
-Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",command=event.openfolder).place(x=120,y=0,height=35,width=60)
-Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",command=event.openMenu).place(x=190,y=0,height=35,width=50)
+Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",command=lambda:event.event.huoqu(mevent)).place(x=0,y=0,height=35,width=50)
+Button(toolBar,text="下载此页",borderwidth=0,activeforeground="SkyBlue",command=lambda:event.event.download(mevent)).place(x=55,y=0,height=35,width=50)
+Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",command=lambda:event.event.openfolder(mevent)).place(x=120,y=0,height=35,width=60)
+Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",command=lambda:event.event.openMenu(mevent)).place(x=190,y=0,height=35,width=50)
 Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue").place(relx=1,y=0,height=35,width=50,anchor="ne")
-Button(root,text="上一页",borderwidth=0,activeforeground="SkyBlue",command=previousPage).place(x=20,y=355)
-Button(root,text="下一页",borderwidth=0,activeforeground="SkyBlue",command=nextPage).place(x=180,y=355)
+Button(root,text="上一页",borderwidth=0,activeforeground="SkyBlue",command=lambda:event.event.previousPage(mevent)).place(x=20,y=355)
+Button(root,text="下一页",borderwidth=0,activeforeground="SkyBlue",command=lambda:event.event.nextPage(mevent)).place(x=180,y=355)
 PageT=StringVar()
 PageT.set("第 页，共 页")
 PageL=Label(root,textvariable=PageT)
@@ -85,15 +63,11 @@ pageBar.place(relwidth=1,height=160,relx=1,rely=1,anchor="se")
 logT=Text(pageBar,bg="black",fg="white")
 logT.place(relwidth=1,height=150,relx=1,rely=1,anchor="se")
 
-event.tree=tree_date
-event.log=logT
-event.root=root
-event.page=PageT
-event.printl("下载程序初始化")
-event.printl("v 1.0.0   BY MUYOO")
-event.checkConfig()
-event.printl("配置完成")
-mypica=pica.pica(event)
-huoqu(1)
+mevent=event.event(logT,root,PageT,tree_date)
+mevent.printl("下载程序初始化")
+mevent.printl("v 1.0.0   BY MUYOO")
+mevent.checkConfig()
+mevent.printl("配置完成")
+mevent.huoqu(1)
 
 root.mainloop()
