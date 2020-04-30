@@ -6,6 +6,7 @@ log=None
 root=None
 page=None
 tree=None
+mself=None
 
 #打印信息到窗口日志
 def printl(text):
@@ -78,6 +79,9 @@ def getNowPage():
 #获取收藏夹的总页码数
 def getAllPage():
     return d.AllPage
+
+def getdowning():
+    return d.Downloading
 
 #更改当前页码数
 def setNowPage(nowp):

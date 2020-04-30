@@ -10,4 +10,4 @@ Token=''
 Downloaded=[]
 nowPage=1
 AllPage=0
-Downloading=0
+Downloading=''
