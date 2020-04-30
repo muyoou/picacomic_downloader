@@ -3,6 +3,7 @@ from tkinter import ttk
 import tkinter.messagebox
 import d
 import fileManager
+import thread
 
 
 class setbox ():
@@ -46,5 +47,6 @@ class setbox ():
             d.Password=data['password']
             d.Proxy=data['proxy']
             d.Image_quality=data['quality']
+            thread
             self.t2.destroy()
         

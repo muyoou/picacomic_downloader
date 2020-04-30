@@ -1,22 +1,18 @@
 from tkinter import * 
 from tkinter import ttk
 import pica
-import threading
+import thread
 import event
 
 root = Tk()
 root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
 mypica=None
-        
-
-
-
 
 def huoqu(index=0):
     if index!=0:
         event.setNowPage(index)
-    thread1=myThread(tree_date,mypica,event.getNowPage())
+    thread1=thread.myThread(tree_date,mypica,event)
     thread1.start()
 
 def nextPage():
@@ -30,7 +26,7 @@ def previousPage():
         huoqu(tem-1)
 
 def download():
-    thread1=downThread(tree_date,mypica)
+    thread1=thread.downThread(tree_date,mypica,event)
     thread1.start()
 
 root.title("哔咔收藏夹下载") 
@@ -89,6 +85,7 @@ pageBar.place(relwidth=1,height=160,relx=1,rely=1,anchor="se")
 logT=Text(pageBar,bg="black",fg="white")
 logT.place(relwidth=1,height=150,relx=1,rely=1,anchor="se")
 
+event.tree=tree_date
 event.log=logT
 event.root=root
 event.page=PageT

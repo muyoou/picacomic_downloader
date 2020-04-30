@@ -1,9 +1,12 @@
+import threading
+
 class myThread (threading.Thread): 
-    def __init__(self,tree_date,mypica,page):
+    def __init__(self,tree_date,mypica,event):
         threading.Thread.__init__(self)
         self.tree_date=tree_date
         self.mpica=mypica
-        self.page=page
+        self.page=event.getNowPage()
+        self.event=event
 
     def run(self):
         if self.mpica.login() is 1:
@@ -13,7 +16,7 @@ class myThread (threading.Thread):
             self.tree_date.delete(item)
         tmp=0
         #tmp2=1
-        event.printl("获取收藏夹信息中...")
+        self.event.printl("获取收藏夹信息中...")
         #while True:
         self.mpica.getPage(self.page)
         #self.mpica.allInfo.extend(self.mpica.allComicInfo)
@@ -23,15 +26,16 @@ class myThread (threading.Thread):
         #if tmp2==self.mpica.pageNum:break
         #else:tmp2+=1
         #    break
-        event.printl("收藏夹加载完成！")
+        self.event.printl("收藏夹加载完成！")
         
 class downThread (threading.Thread):
-    def __init__(self,tree_date,mypica):
+    def __init__(self,tree_date,mypica,event):
         threading.Thread.__init__(self)
         self.tree_date=tree_date
         self.mpica=mypica
+        self.event=event
     def run(self):
-        event.printl("开始下载")
+        self.event.printl("开始下载")
         for item in self.tree_date.get_children():
             self.mpica.getNowPagePic()
             print(self.tree_date.item(item,"values"))
