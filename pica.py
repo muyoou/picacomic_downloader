@@ -37,6 +37,8 @@ class pica():
         S.saveRootPath = None
         #当前图片的保存路径
         S.savePath = None
+        #下载列表
+        S.dolwnloadList=[]
         S.event.printl("初始化完成")
 
     #用于尝试使用token和密码登录
@@ -155,7 +157,12 @@ class pica():
 
     #下载当前页的漫画
     def getNowPagePic(self):
-        for self.comicInfo in self.allComicInfo:
+        self.dolwnloadList+=self.allComicInfo
+        self.getListPic()
+
+    #下载列表里的所有漫画
+    def getListPic(self):
+        for self.comicInfo in self.dolwnloadList:
             d.Downloading=self.comicInfo['_id']
             self.allEpsInfo=self.getComicEps()
             self.getComicPic()

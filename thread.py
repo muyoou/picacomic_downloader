@@ -9,7 +9,7 @@ class myThread (threading.Thread):
         self.event=event
 
     def run(self):
-        if self.mpica.login() is 1:
+        if self.mpica.login()==1:
             input("error")
         delList=self.tree_date.get_children()
         for item in delList:
@@ -36,6 +36,6 @@ class downThread (threading.Thread):
         self.event=event
     def run(self):
         self.event.printl("开始下载")
+        self.mpica.getNowPagePic()
         for item in self.tree_date.get_children():
-            self.mpica.getNowPagePic()
             print(self.tree_date.item(item,"values"))

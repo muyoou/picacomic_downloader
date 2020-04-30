@@ -20,7 +20,6 @@ class setbox ():
         ttk.Separator(t2,orient='horizontal').place(x=10,y=120,width=240)
         self.var = StringVar()
         self.var.set('high')
-        
         self.e1=Entry(t2)
         self.e3=Entry(t2, show='*')
         Radiobutton(t2, text='高', variable=self.var, value='high').place(x=90,y=90)
