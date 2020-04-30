@@ -39,7 +39,7 @@ class mrequest():
             if auth!="":
                     headers.update({"authorization":auth})
             if mothed=="POST":
-                    r = requests.post(url,headers=headers,data=json.dumps(payload),verify=False,proxies=self.proxies)
+                        r = requests.post(url,headers=headers,data=json.dumps(payload),verify=False,proxies=self.proxies)
             elif mothed=="GET":
                     getnum=0
                     headers.pop("Content-Type")
