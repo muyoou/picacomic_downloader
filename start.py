@@ -43,7 +43,9 @@ class downThread (threading.Thread):
         self.tree_date=tree_date
         self.mpica=mypica
     def run(self):
+        event.printl("开始下载")
         for item in self.tree_date.get_children():
+            self.mpica.getNowPagePic()
             print(self.tree_date.item(item,"values"))
 
 

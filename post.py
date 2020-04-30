@@ -44,7 +44,12 @@ class mrequest():
                     getnum=0
                     headers.pop("Content-Type")
                     while True:
-                        r = requests.get(url,headers=headers,verify=False,proxies=self.proxies)
+                        try:
+                             r = requests.get(url,headers=headers,verify=False,proxies=self.proxies)
+                        except requests.exceptions.ProxyError:
+                             print("代理错误")
+                        except requests.exceptions.ConnectionError:
+                             print("连接错误")
                         if r.status_code == 200:
                              print('GET请求成功')
                              break
@@ -59,12 +64,15 @@ class mrequest():
                     headers.pop("Content-Type")
                     while True:
                         try:
-                            r = requests.get(nurl,headers=headers,verify=False,stream=True)
+                            r = requests.get(nurl,headers=headers,verify=False,stream=True,proxies=self.proxies)
                         except requests.exceptions.ConnectionError:
                             print("连接超时")
-                            continue
+                            r=None
+                            break
                         if r.status_code == 200:
-                             fileManager.saveImg(payload,r.content)
+                             if not fileManager.isExist(payload):
+                                open(payload, 'wb').write(r.content)
+                             #fileManager.saveImg(payload,r.content)
                              break
                         else:
                              time.sleep(3)
