@@ -5,7 +5,6 @@ import requests
 import urllib3
 import json
 import d
-import fileManager
 urllib3.disable_warnings()
 
 class mrequest():
@@ -50,6 +49,7 @@ class mrequest():
                              print("代理错误")
                         except requests.exceptions.ConnectionError:
                              print("连接错误")
+                             #需要错误处理
                         if r.status_code == 200:
                              print('GET请求成功')
                              break
@@ -58,7 +58,7 @@ class mrequest():
                              print('尝试重新连接中。。。')
                              time.sleep(3)
                              getnum+=1
-                             if getnum>3 :return -1
+                             if getnum>d.GetNum :return -1
             else:
                     getnum=0
                     headers.pop("Content-Type")
@@ -66,7 +66,8 @@ class mrequest():
                         try:
                             r = requests.get(nurl,headers=headers,verify=False,stream=True,proxies=self.proxies)
                         except requests.exceptions.ConnectionError:
-                            print("连接超时")
+                            print("连接错误")
+                            #需要错误处理
                             r=None
                             break
                         if r.status_code == 200:
@@ -76,5 +77,5 @@ class mrequest():
                              time.sleep(3)
                              print('图片加载错误')
                              getnum+=1
-                             if getnum>8 :break
+                             if getnum>d.ImaConnNum :return -1
             return r
