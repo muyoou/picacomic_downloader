@@ -1,12 +1,16 @@
 import d
 import fileManager
 import setbox
+import thread
+import pica
 
 log=None
 root=None
 page=None
 tree=None
 mself=None
+mpica=None
+    
 
 #打印信息到窗口日志
 def printl(text):
@@ -88,3 +92,26 @@ def setNowPage(nowp):
     d.nowPage=nowp
     page.set("第%d页，共%d页"%(nowp,d.AllPage))
 
+def huoqu(index=0):
+    if index!=0:
+        setNowPage(index)
+    thread1=thread.myThread(tree,mpica,mself)
+    thread1.start()
+
+def nextPage():
+    tem=getNowPage()
+    if(tem<getAllPage()):
+        huoqu(tem+1)
+
+def previousPage():
+    tem=getNowPage()
+    if(tem>1):
+        huoqu(tem-1)
+
+def download():
+    thread1=thread.downThread(tree,mpica,mself)
+    thread1.start()
+
+def refresh():
+    thread1=thread.refreshThread(tree,mself)
+    thread1.start()
