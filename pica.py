@@ -153,19 +153,21 @@ class pica():
         for self.epsInfo in self.allEpsInfo:
             self.epsID=self.epsInfo["order"]
             self.getEpsPic()
-        fileManager.addDownloaded(self.comicInfo['_id'])
+        self.event.addDownloaded(self.comicInfo['_id'])
 
-    #下载当前页的漫画
-    def getNowPagePic(self):
-        self.dolwnloadList+=self.allComicInfo
-        self.getListPic()
+    #将当前页的漫画添加到下载列表
+    def putNowPagePicToList(self):
+        for item in self.allComicInfo:
+            if not self.event.isDownloaded(item['_id']):
+                self.dolwnloadList.append(item)
 
-    #下载列表里的所有漫画
+    #下载下载列表里的所有漫画
     def getListPic(self):
         for self.comicInfo in self.dolwnloadList:
             d.Downloading=self.comicInfo['_id']
             self.allEpsInfo=self.getComicEps()
             self.getComicPic()
+
 
     #示例：下载第一页的第一个漫画
     def start2(S):

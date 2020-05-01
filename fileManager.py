@@ -37,9 +37,7 @@ def readDownloaded():
         data = json.load(f)
         return data
 
-def addDownloaded(input):
-    data=readDownloaded()
-    data+=input
+def updataDownloaded(input):
     with open('.\\data\\downloaded.json', 'w') as f:
         json.dump(input,f,ensure_ascii=False)
 

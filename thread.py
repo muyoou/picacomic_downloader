@@ -1,4 +1,5 @@
 import threading
+import time
 
 class myThread (threading.Thread): 
     def __init__(self,tree_date,mypica,event):
@@ -29,16 +30,18 @@ class myThread (threading.Thread):
         self.event.printl("收藏夹加载完成！")
         
 class downThread (threading.Thread):
-    def __init__(self,tree_date,mypica,event):
+    def __init__(self,mypica,event):
         threading.Thread.__init__(self)
-        self.tree_date=tree_date
         self.mpica=mypica
         self.event=event
+        print("下载线程启动")
     def run(self):
-        self.event.printl("开始下载")
-        self.mpica.getNowPagePic()
+        while True:
+            time.sleep(1)
+            if self.mpica.dolwnloadList!=[]:
+                print("开始下载")
         
-
+'''
 class refreshThread(threading.Thread):
     def __init__(self,tree,event,downing='',downed=[]):
         threading.Thread.__init__(self)
@@ -47,6 +50,4 @@ class refreshThread(threading.Thread):
         self.downing=downing
         self.downed=downed
     def run(self):
-        for item in self.tree_date.get_children():
-            if self.tree_date.set(item,'id')==self.event.getdowning:
-                self.tree_date.set(item,'download','下载中...')
+'''

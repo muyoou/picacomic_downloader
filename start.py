@@ -24,7 +24,7 @@ helpmenu.add_command(label="About...")
  
 toolBar = Frame(root).place(relwidth=1,x=0,y=0)
 Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",command=event.huoqu).place(x=0,y=0,height=35,width=50)
-Button(toolBar,text="下载此页",borderwidth=0,activeforeground="SkyBlue",command=event.download).place(x=55,y=0,height=35,width=50)
+Button(toolBar,text="下载此页",borderwidth=0,activeforeground="SkyBlue",command=event.downloadPage).place(x=55,y=0,height=35,width=50)
 Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",command=event.openfolder).place(x=120,y=0,height=35,width=60)
 Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",command=event.openMenu).place(x=190,y=0,height=35,width=50)
 Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue",command=event.refresh).place(relx=1,y=0,height=35,width=50,anchor="ne")
@@ -78,7 +78,6 @@ event.printl("v 1.0.0   BY MUYOO")
 event.checkConfig()
 event.printl("配置完成")
 event.getPica()
-
 event.huoqu(1)
-
+event.download()
 root.mainloop()
