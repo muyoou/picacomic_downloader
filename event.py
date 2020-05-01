@@ -84,6 +84,7 @@ def getNowPage():
 def getAllPage():
     return d.AllPage
 
+#获取现在正在下载的漫画id
 def getdowning():
     return d.Downloading
 
@@ -92,26 +93,38 @@ def setNowPage(nowp):
     d.nowPage=nowp
     page.set("第%d页，共%d页"%(nowp,d.AllPage))
 
+#获取pica类
+def getPica():
+    global mpica
+    mpica=pica.pica(mself)
+
+#-----事件方法-----
+
+#获取index页的漫画列表
 def huoqu(index=0):
     if index!=0:
         setNowPage(index)
     thread1=thread.myThread(tree,mpica,mself)
     thread1.start()
 
+#下一页
 def nextPage():
     tem=getNowPage()
     if(tem<getAllPage()):
         huoqu(tem+1)
 
+#上一页
 def previousPage():
     tem=getNowPage()
     if(tem>1):
         huoqu(tem-1)
 
+#启动下载线程
 def download():
     thread1=thread.downThread(tree,mpica,mself)
     thread1.start()
 
+#刷新列表下载状态
 def refresh():
     thread1=thread.refreshThread(tree,mself)
     thread1.start()

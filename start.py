@@ -1,13 +1,11 @@
 from tkinter import * 
 from tkinter import ttk
-import pica
 
 import event
 
 root = Tk()
 root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
-mypica=None
 
 
 
@@ -79,8 +77,7 @@ event.printl("下载程序初始化")
 event.printl("v 1.0.0   BY MUYOO")
 event.checkConfig()
 event.printl("配置完成")
-mpica=pica.pica(event)
-event.mpica=mpica
+event.getPica()
 
 event.huoqu(1)
 
