@@ -148,5 +148,8 @@ def downloadPage():
 #刷新列表下载状态
 def refresh():
     for item in tree.get_children():
-        if tree.set(item,'id')==getdowning: 
+        tem=tree.set(item,'id')
+        if tem==getdowning(): 
             tree.set(item,'download','下载中...')
+        if isDownloaded(tem):
+            tree.set(item,'download','已下载')

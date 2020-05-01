@@ -70,10 +70,8 @@ class mrequest():
                             r=None
                             break
                         if r.status_code == 200:
-                             if not fileManager.isExist(payload):
-                                open(payload, 'wb').write(r.content)
-                             #fileManager.saveImg(payload,r.content)
-                             break
+                            open(payload, 'wb').write(r.content)
+                            break
                         else:
                              time.sleep(3)
                              print('图片加载错误')

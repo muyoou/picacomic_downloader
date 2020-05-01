@@ -116,7 +116,11 @@ class pica():
     #通过图片信息下载图片
     def getPic(self,picture,savepath):
         print(str(picture['fileServer'])+"/static/"+str(picture['path']))
-        return self.mrp.sendPost(str(picture['fileServer'])+"/static/"+str(picture['path']),savepath,"img",self.mytoken)
+        if not fileManager.isExist(savepath):
+            return self.mrp.sendPost(str(picture['fileServer'])+"/static/"+str(picture['path']),savepath,"img",self.mytoken)
+        else:
+            print('图片已存在！')
+            return 1
 
     #获取一张图片的保存路径及文件名
     def getPicSavePath(self,root,id,info):
@@ -146,7 +150,7 @@ class pica():
         comic=self.isNone(comic,self.comicInfo)
         eps=self.isNone(eps,self.epsInfo)
         id=self.isNone(id,self.index)
-        return "./comic/"+str(id)+'_'+str(comic['title'])+"/"+str(eps['title'])
+        return "./comic/"+str(comic['title'])+"/"+str(eps['title'])
 
     #直接下载一个漫画中的所有图片
     def getComicPic(self):
@@ -161,6 +165,17 @@ class pica():
             if not self.event.isDownloaded(item['_id']):
                 self.dolwnloadList.append(item)
 
+    #下载列表中的第一个漫画
+    def downloadFirstComic(self):
+        self.comicInfo=self.dolwnloadList.pop(0)
+        d.Downloading=self.comicInfo['_id']
+        self.event.refresh()
+        self.allEpsInfo=self.getComicEps()
+        self.getComicPic()
+        d.Downloading=''
+        self.event.refresh()
+
+'''
     #下载下载列表里的所有漫画
     def getListPic(self):
         for self.comicInfo in self.dolwnloadList:
@@ -168,11 +183,11 @@ class pica():
             self.allEpsInfo=self.getComicEps()
             self.getComicPic()
 
-
     #示例：下载第一页的第一个漫画
-    def start2(S):
-        S.index=1
-        S.getPage()
-        S.comicInfo=S.allComicInfo[0]
-        S.allEpsInfo=S.getComicEps()
-        S.getComicPic()
+    def start2(self):
+        self.index=1
+        self.getPage()
+        self.comicInfo=S.allComicInfo[0]
+        self.allEpsInfo=S.getComicEps()
+        self.getComicPic()
+'''

@@ -38,8 +38,8 @@ class downThread (threading.Thread):
     def run(self):
         while True:
             time.sleep(1)
-            if self.mpica.dolwnloadList!=[]:
-                print("开始下载")
+            if len(self.mpica.dolwnloadList)!=0:
+                self.mpica.downloadFirstComic()
         
 '''
 class refreshThread(threading.Thread):
