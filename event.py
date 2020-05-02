@@ -82,6 +82,15 @@ def isDownloaded(input):
         return True
     else: return False
 
+#检查一个动漫是否在下载列表里
+def isInDownloadList(input):
+    for item in mpica.dolwnloadList:
+        print("id信息："+item['_id'])
+        if input==item['_id']:
+            return True
+    return False
+    
+
 #获取现在正在下载的漫画id
 def getdowning():
     return d.Downloading
@@ -106,6 +115,19 @@ def getAllPage():
 def setNowPage(nowp):
     d.nowPage=nowp
     page.set("第%d页，共%d页"%(nowp,d.AllPage))
+
+#-----错误处理-----
+def checkError(input):
+    if input==-1:
+        printl("----------------\n连接超时！")
+        return False
+    elif input==-2:
+        printl("----------------\n连接错误！请检查你的网络，是否能连接到哔咔服务器")
+        return False
+    elif input==-3:
+        printl("----------------\n代理错误！请检查设置中的代理设置。如不需要代理，请保持空值")
+        return False
+    else: return True
 
 #-----事件方法-----
 
@@ -149,7 +171,11 @@ def downloadPage():
 def refresh():
     for item in tree.get_children():
         tem=tree.set(item,'id')
+        print(tem)
+        print()
         if tem==getdowning(): 
             tree.set(item,'download','下载中...')
         if isDownloaded(tem):
             tree.set(item,'download','已下载')
+        if isInDownloadList(tem):
+            tree.set(item,'download','等待下载')

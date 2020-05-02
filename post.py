@@ -10,10 +10,12 @@ urllib3.disable_warnings()
 class mrequest():
 
     def __init__(self):
-        self.proxies = {
-                "http": d.Proxy,
-                "https": d.Proxy,
-            }
+        if not d.Proxy=='':
+            self.proxies = {
+                    "http": d.Proxy,
+                    "https": d.Proxy,
+                }
+        else: self.proxies = None
 
     def sendPost(self,nurl,payload,mothed,auth=""):
             timestr=str(int(time.time()))
@@ -47,9 +49,10 @@ class mrequest():
                              r = requests.get(url,headers=headers,verify=False,proxies=self.proxies)
                         except requests.exceptions.ProxyError:
                              print("代理错误")
+                             return -3
                         except requests.exceptions.ConnectionError:
                              print("连接错误")
-                             #需要错误处理
+                             return -2
                         if r.status_code == 200:
                              print('GET请求成功')
                              break
@@ -67,7 +70,7 @@ class mrequest():
                             r = requests.get(nurl,headers=headers,verify=False,stream=True,proxies=self.proxies)
                         except requests.exceptions.ConnectionError:
                             print("连接错误")
-                            #需要错误处理
+                            return -2
                             r=None
                             break
                         if r.status_code == 200:

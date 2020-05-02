@@ -88,7 +88,13 @@ class pica():
     #获取这一页的收藏夹里的所有漫画信息，并导出到allComicInfo
     def getPage(self,index=None):
         index=self.isNone(index,self.index)
-        tmp=self.mrp.sendPost("users/favourite?s=dd&page="+str(index),None,"GET",self.mytoken).json()['data']['comics']
+        tmp=self.mrp.sendPost("users/favourite?s=dd&page="+str(index),None,"GET",self.mytoken)
+        if not self.event.checkError(tmp):
+            self.event.printl("将在5秒后重试")
+            time.sleep(5)
+            self.getPage(index)
+        else:
+            tmp=tmp.json()['data']['comics']
         if self.pageNum==-1:
             self.pageNum=int(tmp['pages'])
         self.allComicInfo = tmp['docs']
