@@ -46,6 +46,7 @@ class mrequest():
                     headers.pop("Content-Type")
                     while True:
                         try:
+                             self.__init__()
                              r = requests.get(url,headers=headers,verify=False,proxies=self.proxies)
                         except requests.exceptions.ProxyError:
                              print("代理错误")

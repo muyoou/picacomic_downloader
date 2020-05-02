@@ -62,7 +62,7 @@ class pica():
         output=self.mrp.sendPost("auth/sign-in",{"email":d.Email,"password":d.Password},"POST").json()
         print(output)
         if output['message'] == 'invalid email or password':
-            self.event.printl("用户名或密码错误！请在设置中更改")
+            self.event.printl("-------------\n用户名或密码错误！请在设置中更改")
             return 1
         else:
             self.event.printl("登录成功！")

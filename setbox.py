@@ -15,7 +15,7 @@ class setbox ():
         t2.transient(self.root)
         Label(t2, text='哔咔账号', width=8,height=1).place(x=10,y=10)
         Label(t2, text='密码', width=5, height=1).place(x=10,y=50)
-        Label(t2, text='代理设置(https)', width=12, height=1).place(x=10,y=130)
+        Label(t2, text='https代理设置(可选)', width=15, height=1).place(x=10,y=130)
         Label(t2, text='下载图片质量', width=10, height=1).place(x=10,y=90)
         ttk.Separator(t2,orient='horizontal').place(x=10,y=120,width=240)
         self.var = StringVar()
@@ -37,7 +37,7 @@ class setbox ():
 
     def minput(self):
         data={'user':self.e1.get(),'password':self.e3.get(),'proxy':self.e2.get(),'quality':self.var.get()}
-        if(data['user'] is '' or data['password'] is ''):
+        if(data['user'] == '' or data['password'] == ''):
             tkinter.messagebox.showinfo(title='提示', message='请填写哔咔的用户名或密码')
         else:
             fileManager.mkdir(".\\comic")
