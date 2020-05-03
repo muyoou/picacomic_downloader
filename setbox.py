@@ -56,4 +56,5 @@ class setbox ():
             d.Proxy=data['proxy']
             d.Image_quality=data['quality']
             self.event.setboxState=0
+            self.event.huoqu(1)
             self.t2.destroy()

@@ -52,6 +52,7 @@ def checkConfig():
         printl("加载配置文件")
         getConfigByFile()
         printConfig()
+        huoqu(1)
     else:
         printl("初次配置")
         openMenu()

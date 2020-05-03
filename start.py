@@ -64,9 +64,9 @@ event.mself=event
 
 event.printl("下载程序初始化")
 event.printl("v 1.0.0   BY MUYOO")
+event.getPica()
 event.checkConfig()
 event.printl("配置完成")
-event.getPica()
-event.huoqu(1)
+
 event.download()
 root.mainloop()
