@@ -1,4 +1,4 @@
-from tkinter import * 
+from tkinter import Button,Label,Frame,StringVar,Scrollbar,Text,Tk
 from tkinter import ttk
 
 import event
@@ -6,9 +6,6 @@ import event
 root = Tk()
 root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
-
-
-
 root.title("哔咔收藏夹下载") 
 root.geometry("800x560")
  
@@ -17,7 +14,7 @@ Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",command=ev
 Button(toolBar,text="下载此页",borderwidth=0,activeforeground="SkyBlue",command=event.downloadPage).place(x=55,y=0,height=35,width=50)
 Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",command=event.openfolder).place(x=120,y=0,height=35,width=60)
 Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",command=event.openMenu).place(x=190,y=0,height=35,width=50)
-Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue").place(relx=1,y=0,height=35,width=50,anchor="ne")
+Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue",command=event.openAbout).place(relx=1,y=0,height=35,width=50,anchor="ne")
 Button(root,text="上一页",borderwidth=0,activeforeground="SkyBlue",command=event.previousPage).place(x=20,y=355)
 Button(root,text="下一页",borderwidth=0,activeforeground="SkyBlue",command=event.nextPage).place(x=180,y=355)
 PageT=StringVar()

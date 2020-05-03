@@ -3,6 +3,7 @@ import fileManager
 import setbox
 import thread
 import pica
+import aboutme
 
 log=None
 root=None
@@ -12,6 +13,7 @@ mself=None
 mpica=None
 threadaState=0
 setboxState=0
+aboutState=0
 
 #获取pica类
 def getPica():
@@ -164,6 +166,12 @@ def previousPage():
     tem=getNowPage()
     if(tem>1):
         huoqu(tem-1)
+
+#打开关于窗口
+def openAbout():
+    if aboutState==0:
+        aboutme.about(root,mself)
+
 
 #启动下载线程
 def download():
