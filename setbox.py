@@ -7,10 +7,14 @@ import thread
 
 
 class setbox ():
-    def __init__(self,root):
+    def __init__(self,root,event):
+        self.event=event
         self.root=root
+        self.event.setboxState=1
+        x = root.winfo_x()
+        y = root.winfo_y()
         t2 = Toplevel(self.root)
-        t2.geometry("270x200")
+        t2.geometry("270x200+%d+%d"%(x+150,y+100))
         t2.title("设置") 
         t2.transient(self.root)
         Label(t2, text='哔咔账号', width=8,height=1).place(x=10,y=10)
@@ -33,7 +37,12 @@ class setbox ():
         self.e2.place(x=10,y=160)
         self.e3.place(x=80,y=50) 
         Button(t2, text='确定', width=10, height=1, command=self.minput).place(x=170,y=150)
+        t2.protocol('WM_DELETE_WINDOW', self.closeWindow)
         self.t2=t2
+
+    def closeWindow(self):
+        self.event.setboxState=0
+        self.t2.destroy()
 
     def minput(self):
         data={'user':self.e1.get(),'password':self.e3.get(),'proxy':self.e2.get(),'quality':self.var.get()}
@@ -46,5 +55,6 @@ class setbox ():
             d.Password=data['password']
             d.Proxy=data['proxy']
             d.Image_quality=data['quality']
+            self.event.setboxState=0
             self.t2.destroy()
         

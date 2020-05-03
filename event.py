@@ -10,7 +10,8 @@ page=None
 tree=None
 mself=None
 mpica=None
-
+threadaState=0
+setboxState=0
 
 #获取pica类
 def getPica():
@@ -137,14 +138,18 @@ def openfolder():
 
 #打开设置窗口
 def openMenu():
-    setbox.setbox(root)
+    if setboxState==0:
+        setbox.setbox(root,mself)
 
 #获取index页的漫画列表
 def huoqu(index=0):
-    if index!=0:
-        setNowPage(index)
-    thread1=thread.myThread(tree,mpica,mself)
-    thread1.start()
+    if threadaState==1:
+        printl('请等待页面加载完成...')
+    else:
+        if index!=0:
+            setNowPage(index)
+        thread1=thread.myThread(tree,mpica,mself)
+        thread1.start()
 
 #下一页
 def nextPage():

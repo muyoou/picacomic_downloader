@@ -40,7 +40,26 @@ class mrequest():
             if auth!="":
                     headers.update({"authorization":auth})
             if mothed=="POST":
-                        r = requests.post(url,headers=headers,data=json.dumps(payload),verify=False,proxies=self.proxies)
+                getnum=0
+                while True:
+                        try:
+                                self.__init__()
+                                r = requests.post(url,headers=headers,data=json.dumps(payload),verify=False,proxies=self.proxies)
+                        except requests.exceptions.ProxyError:
+                                print("代理错误")
+                                return -3
+                        except requests.exceptions.ConnectionError:
+                                print("连接错误")
+                                return -2
+                        if r.status_code == 200:
+                                print('GET请求成功')
+                                break
+                        else:
+                                print('GET请求失败')
+                                print('尝试重新连接中。。。')
+                                time.sleep(3)
+                                getnum+=1
+                                if getnum>d.GetNum :return -1
             elif mothed=="GET":
                     getnum=0
                     headers.pop("Content-Type")
@@ -68,6 +87,7 @@ class mrequest():
                     headers.pop("Content-Type")
                     while True:
                         try:
+                            self.__init__()
                             r = requests.get(nurl,headers=headers,verify=False,stream=True,proxies=self.proxies)
                         except requests.exceptions.ConnectionError:
                             print("连接错误")

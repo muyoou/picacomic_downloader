@@ -10,6 +10,7 @@ class myThread (threading.Thread):
         self.event=event
 
     def run(self):
+        self.event.threadaState=1
         if self.mpica.login() == 1:
             input("error")
         delList=self.tree_date.get_children()
@@ -27,6 +28,7 @@ class myThread (threading.Thread):
         #if tmp2==self.mpica.pageNum:break
         #else:tmp2+=1
         #    break
+        self.event.threadaState=0
         self.event.printl("收藏夹加载完成！")
         
 class downThread (threading.Thread):

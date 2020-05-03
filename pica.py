@@ -59,7 +59,14 @@ class pica():
     #使用密码登录，并保存token
     def loginByWeb(self):
         self.event.printl('尝试使用密码登录中...')
-        output=self.mrp.sendPost("auth/sign-in",{"email":d.Email,"password":d.Password},"POST").json()
+        
+        output=self.mrp.sendPost("auth/sign-in",{"email":d.Email,"password":d.Password},"POST")
+        if not self.event.checkError(output):
+            self.event.printl("将在5秒后重试")
+            time.sleep(5)
+            self.loginByWeb()
+        else:
+            output=output.json()
         print(output)
         if output['message'] == 'invalid email or password':
             self.event.printl("-------------\n用户名或密码错误！请在设置中更改")
@@ -170,7 +177,7 @@ class pica():
     #将当前页的漫画添加到下载列表
     def putNowPagePicToList(self):
         for item in self.allComicInfo:
-            if not self.event.isDownloaded(item['_id']):
+            if not self.event.isDownloaded(item['_id']) and not item in self.dolwnloadList:
                 self.dolwnloadList.append(item)
 
     #下载列表中的第一个漫画
