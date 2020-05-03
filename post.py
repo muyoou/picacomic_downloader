@@ -44,6 +44,7 @@ class mrequest():
                 while True:
                         try:
                                 self.__init__()
+                                print(self.proxies)
                                 r = requests.post(url,headers=headers,data=json.dumps(payload),verify=False,proxies=self.proxies)
                         except requests.exceptions.ProxyError:
                                 print("代理错误")
@@ -51,6 +52,9 @@ class mrequest():
                         except requests.exceptions.ConnectionError:
                                 print("连接错误")
                                 return -2
+                        except BaseException:
+                                print("未知错误")
+                                return -4
                         if r.status_code == 200:
                                 print('GET请求成功')
                                 break
@@ -66,6 +70,7 @@ class mrequest():
                     while True:
                         try:
                              self.__init__()
+                             print(self.proxies)
                              r = requests.get(url,headers=headers,verify=False,proxies=self.proxies)
                         except requests.exceptions.ProxyError:
                              print("代理错误")
@@ -73,6 +78,9 @@ class mrequest():
                         except requests.exceptions.ConnectionError:
                              print("连接错误")
                              return -2
+                        except BaseException:
+                             print("未知错误")
+                             return -4
                         if r.status_code == 200:
                              print('GET请求成功')
                              break

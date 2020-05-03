@@ -124,6 +124,7 @@ def checkError(input):
         return False
     elif input==-2:
         printl("----------------\n连接错误！请检查你的网络，是否能连接到哔咔服务器")
+        printl("建议使用VPN或者在设置中配置代理")
         return False
     elif input==-3:
         printl("----------------\n代理错误！请检查设置中的代理设置。如不需要代理，请保持空值")

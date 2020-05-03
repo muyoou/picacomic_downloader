@@ -27,8 +27,8 @@ class setbox ():
         self.e1=Entry(t2)
         self.e3=Entry(t2, show='*')
         Radiobutton(t2, text='高', variable=self.var, value='high').place(x=90,y=90)
-        Radiobutton(t2, text='中等', variable=self.var, value='B').place(x=140,y=90)
-        Radiobutton(t2, text='低', variable=self.var, value='C').place(x=200,y=90)
+        Radiobutton(t2, text='中等', variable=self.var, value='medium').place(x=140,y=90)
+        Radiobutton(t2, text='低', variable=self.var, value='low').place(x=200,y=90)
         self.e2=Entry(t2)
         self.e1.insert(0, d.Email)
         self.e3.insert(0,d.Password)
@@ -57,4 +57,3 @@ class setbox ():
             d.Image_quality=data['quality']
             self.event.setboxState=0
             self.t2.destroy()
-        

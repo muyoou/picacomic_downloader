@@ -59,8 +59,8 @@ class pica():
     #使用密码登录，并保存token
     def loginByWeb(self):
         self.event.printl('尝试使用密码登录中...')
-        
         output=self.mrp.sendPost("auth/sign-in",{"email":d.Email,"password":d.Password},"POST")
+        print("结果："+str(output))
         if not self.event.checkError(output):
             self.event.printl("将在5秒后重试")
             time.sleep(5)
@@ -68,15 +68,18 @@ class pica():
         else:
             output=output.json()
         print(output)
-        if output['message'] == 'invalid email or password':
-            self.event.printl("-------------\n用户名或密码错误！请在设置中更改")
-            return 1
-        else:
-            self.event.printl("登录成功！")
-            self.mytoken=str(output['data']['token'])
-            fileManager.creatTokenFile(self.mytoken)
-            self.event.printl("token已保存")
-            return 0
+        try:
+            if output['message'] == 'invalid email or password':
+                self.event.printl("-------------\n用户名或密码错误！请在设置中更改")
+                return 1
+            else:
+                self.event.printl("登录成功！")
+                self.mytoken=str(output['data']['token'])
+                fileManager.creatTokenFile(self.mytoken)
+                self.event.printl("token已保存")
+                return 0
+        except TypeError:
+            self.login()
 
     #测试能否连接，-1为失败，0为成功
     def testConn(self):
@@ -102,9 +105,13 @@ class pica():
             self.getPage(index)
         else:
             tmp=tmp.json()['data']['comics']
+            print('json:'+str(tmp))
         if self.pageNum==-1:
             self.pageNum=int(tmp['pages'])
-        self.allComicInfo = tmp['docs']
+        try:
+            self.allComicInfo = tmp['docs']
+        except TypeError:
+            self.getPage(index)
         for item in self.allComicInfo:
             if self.event.isDownloaded(item['_id']):
                 item['download']=True

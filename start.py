@@ -34,7 +34,6 @@ sb.place(relx=1,y=35,anchor="ne",width=20,height=320)
 tree_date['columns'] = ['id','name','creater','likesCount','pagesCount','epsCount',"download"]
 tree_date.place(x=0,y=35,width=780,height=320)
 
-
 # 设置列宽度
 tree_date.column('id',width=0)
 tree_date.column('name',width=200)
