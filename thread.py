@@ -23,11 +23,12 @@ class myThread (threading.Thread):
         self.mpica.getPage(self.page)
         #self.mpica.allInfo.extend(self.mpica.allComicInfo)
         for item in self.mpica.allComicInfo:
-            self.tree_date.insert('',tmp,values=(item.get('_id',''),item.get('title',''),item.get('author',''),item.get('likesCount',''),item.get('pagesCount',''),item.get('epsCount',''),'已下载'if item['download']else '未下载'))
+            self.tree_date.insert('',tmp,values=(item.get('_id',''),item.get('title',''),item.get('author',''),item.get('likesCount',''),item.get('pagesCount',''),item.get('epsCount',''),''))
             tmp+=1
         #if tmp2==self.mpica.pageNum:break
         #else:tmp2+=1
         #    break
+        self.event.refresh()
         self.event.threadaState=0
         self.event.printl("收藏夹加载完成！")
         
@@ -36,12 +37,22 @@ class downThread (threading.Thread):
         threading.Thread.__init__(self)
         self.mpica=mypica
         self.event=event
+        self._stop_event = threading.Event()
         print("下载线程启动")
     def run(self):
         while True:
             time.sleep(1)
             if len(self.mpica.dolwnloadList)!=0:
                 self.mpica.downloadFirstComic()
+            if self.stopped():
+                print('下载线程关闭')
+                break
+
+    def stop(self):
+        self._stop_event.set()
+
+    def stopped(self):
+        return self._stop_event.is_set()
         
 '''
 class refreshThread(threading.Thread):

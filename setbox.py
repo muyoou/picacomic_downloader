@@ -17,6 +17,7 @@ class setbox ():
         t2.geometry("270x200+%d+%d"%(x+150,y+100))
         t2.title("设置") 
         t2.transient(self.root)
+        t2.resizable(0,0)
         Label(t2, text='哔咔账号', width=8,height=1).place(x=10,y=10)
         Label(t2, text='密码', width=5, height=1).place(x=10,y=50)
         Label(t2, text='https代理设置(可选)', width=15, height=1).place(x=10,y=130)

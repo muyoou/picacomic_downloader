@@ -4,6 +4,7 @@ import setbox
 import thread
 import pica
 import aboutme
+import sys
 
 log=None
 root=None
@@ -14,6 +15,7 @@ mpica=None
 threadaState=0
 setboxState=0
 aboutState=0
+downloadThred=None
 
 #获取pica类
 def getPica():
@@ -175,8 +177,10 @@ def openAbout():
 
 #启动下载线程
 def download():
+    global downloadThred
     thread1=thread.downThread(mpica,mself)
     thread1.start()
+    downloadThred=thread1
 
 #下载此页
 def downloadPage():
@@ -194,3 +198,7 @@ def refresh():
             tree.set(item,'download','已下载')
         if isInDownloadList(tem):
             tree.set(item,'download','等待下载')
+
+def close():
+    downloadThred.stop()
+    root.destroy()

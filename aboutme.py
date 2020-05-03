@@ -13,6 +13,7 @@ class about():
         t2 = Toplevel(self.root)
         t2.geometry("270x180+%d+%d"%(x+150,y+100))
         t2.title("关于") 
+        t2.resizable(0,0)
         photo = PhotoImage(file=".\\icon\\temp.gif")
         imgLabel = Label(t2,image=photo)
         imgLabel.image=photo

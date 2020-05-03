@@ -1,14 +1,15 @@
 from tkinter import Button,Label,Frame,StringVar,Scrollbar,Text,Tk
 from tkinter import ttk
-
+import sys
 import event
 
 root = Tk()
 root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
-root.title("哔咔收藏夹下载") 
+root.title("哔咔收藏夹下载")
 root.geometry("800x560")
- 
+root.protocol("WM_DELETE_WINDOW",event.close)
+
 toolBar = Frame(root).place(relwidth=1,x=0,y=0)
 Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",command=event.huoqu).place(x=0,y=0,height=35,width=50)
 Button(toolBar,text="下载此页",borderwidth=0,activeforeground="SkyBlue",command=event.downloadPage).place(x=55,y=0,height=35,width=50)
