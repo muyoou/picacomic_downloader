@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk
 import sys
 import event
-import test
+import mTreeList
 
 root = Tk()
 root.iconbitmap(".\\icon\\favicon.ico")
@@ -15,9 +15,10 @@ root.protocol("WM_DELETE_WINDOW",event.close)
 toolBar = Frame(root)
 toolBar.pack(fill=X)
 Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",padx=5,width=5,height=2,command=event.huoqu).pack(side=LEFT)
-Button(toolBar,text="下载此页",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.downloadPage).pack(side=LEFT)
+
 Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.openfolder).pack(side=LEFT)
 Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.openMenu).pack(side=LEFT)
+Button(toolBar,text="下载选中",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.downloadPage).pack(side=LEFT)
 Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue",padx=10,height=2,command=event.openAbout).pack(side=RIGHT)
 
 '''
@@ -49,7 +50,7 @@ tree_date.heading('likesCount',text='点赞数')
 tree_date.heading('download',text='状态')
 # 给表格中添加数据
 '''
-tree_date=test.My_Tk(root)
+tree_date=mTreeList.My_Tk(root)
 pageSetBar=Frame(root)
 pageSetBar.pack(fill=X)
 Button(pageSetBar,text="上一页",borderwidth=0,activeforeground="SkyBlue",padx=10,height=2,command=event.previousPage).pack(side=LEFT)
@@ -59,7 +60,9 @@ PageL=Label(pageSetBar,textvariable=PageT,padx=10)
 PageL.pack(side=LEFT)
 Button(pageSetBar,text="下一页",borderwidth=0,activeforeground="SkyBlue",padx=10,height=2,command=event.nextPage).pack(side=LEFT)
 #Button(root,text='暂停')
-
+Button(pageSetBar,text="暂停下载",borderwidth=0,activeforeground="SkyBlue",padx=10,height=2,command=event.nextPage).pack(side=RIGHT)
+Button(pageSetBar,text="继续下载",borderwidth=0,activeforeground="SkyBlue",padx=10,height=2,command=event.nextPage).pack(side=RIGHT)
+Label(pageSetBar,text="当前没有下载任务",fg='Gray').pack(side=RIGHT)
 
 pageBar=Frame(root)
 pageBar.place(relwidth=1,height=160,relx=1,rely=1,anchor="se")
@@ -78,6 +81,7 @@ event.checkConfig()
 event.printl("配置完成")
 
 event.download()
+
 '''
 heading_frame=Frame(root)
 heading_frame.pack(fill='x')

@@ -110,15 +110,6 @@ class My_Tk():
             ck_button['command']=lambda item=tv_item:self.select_button(item)
             ck_button.pack()
             self.orm[tv_item]=[ck_button]
-        '''
-        for i in range(20):
-            tv_item=self.tv.insert('', i, value=[i,i,i,i,''],tags=('oddrow'))#item默认状态tags
-            import tkinter
-            ck_button = tkinter.Checkbutton(self.button_frame,variable=IntVar())
-            ck_button['command']=lambda item=tv_item:self.select_button(item)
-            ck_button.pack()
-            self.orm[tv_item]=[ck_button]
-            '''
         #每次点击插入tree，先设定全选按钮不打勾，接着打勾并且调用其函数
         self.all_buttonvar.set(0)
         #self.all_button.invoke()
@@ -139,7 +130,7 @@ class My_Tk():
             else:
                 button.deselect()
                 self.tv.item(item, tags='oddrow')
- 
+
     def select_button(self,item):
         '''多选按钮的回调函数
             作用：1.根据按钮的状态，改变对应item的底色(被选中)
@@ -151,16 +142,15 @@ class My_Tk():
         else:
             self.tv.item(item, tags='oddrow')
         self.all_button_select()#根据所有按钮改变 全选按钮状态
- 
- 
+        print(self.orm)
+
     def select_tree(self,event):
         '''tree绑定的回调函数
            作用：根据所点击的item改变 对应的按钮'''
         select_item=self.tv.focus()
         button = self.orm[select_item][0]
         button.invoke()  #改变对应按钮的状态，而且调用其函数
- 
- 
+
     def all_button_select(self):
         '''根据所有按钮改变 全选按钮状态
             循环所有按钮，当有一个按钮没有被打勾时，全选按钮取消打勾'''
@@ -171,3 +161,6 @@ class My_Tk():
                 break
         else:
             self.all_buttonvar.set(1)
+
+    def getSelected(self):
+        print()
