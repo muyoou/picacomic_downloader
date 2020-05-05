@@ -135,6 +135,7 @@ class My_Tk():
         '''多选按钮的回调函数
             作用：1.根据按钮的状态，改变对应item的底色(被选中)
                  2.根据所有按钮被选的情况，修改all_button的状态'''
+        
         button=self.orm[item][0]
         button_value=button.getvar(button['variable'])
         if button_value=='1':
@@ -142,7 +143,6 @@ class My_Tk():
         else:
             self.tv.item(item, tags='oddrow')
         self.all_button_select()#根据所有按钮改变 全选按钮状态
-        print(self.orm)
 
     def select_tree(self,event):
         '''tree绑定的回调函数
@@ -163,4 +163,11 @@ class My_Tk():
             self.all_buttonvar.set(1)
 
     def getSelected(self):
-        print()
+        tmp=1
+        output=[]
+        for [button] in self.orm.values():
+            button_value = button.getvar(button['variable'])
+            if button_value!='0':
+                output.append(tmp)
+            tmp+=1
+        return output

@@ -18,7 +18,7 @@ Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",padx=5,wid
 
 Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.openfolder).pack(side=LEFT)
 Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.openMenu).pack(side=LEFT)
-Button(toolBar,text="下载选中",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.downloadPage).pack(side=LEFT)
+Button(toolBar,text="下载选中",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.downloadSelected).pack(side=LEFT)
 Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue",padx=10,height=2,command=event.openAbout).pack(side=RIGHT)
 
 '''

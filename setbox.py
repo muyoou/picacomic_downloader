@@ -5,7 +5,6 @@ import d
 import fileManager
 import thread
 
-
 class setbox ():
     def __init__(self,root,event):
         self.event=event

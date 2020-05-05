@@ -187,6 +187,15 @@ class pica():
             if not self.event.isDownloaded(item['_id']) and not item in self.dolwnloadList:
                 self.dolwnloadList.append(item)
 
+    #将选中的添加到下载列表
+    def putSelectPicToList(self,data):
+        for item in data:
+            selectComic=self.allComicInfo[item-1]
+            print(selectComic['title'])
+            if not self.event.isDownloaded(selectComic['_id']) and not selectComic in self.dolwnloadList:
+                self.dolwnloadList.append(selectComic)
+                
+
     #下载列表中的第一个漫画
     def downloadFirstComic(self):
         self.comicInfo=self.dolwnloadList.pop(0)

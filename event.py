@@ -192,7 +192,8 @@ def downloadPage():
 
 #下载选中
 def downloadSelected():
-    print()
+    mpica.putSelectPicToList(tree.getSelected())
+
 #刷新列表下载状态
 def refresh():
     for item in tree.getTree().get_children():
