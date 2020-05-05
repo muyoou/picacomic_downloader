@@ -1,14 +1,17 @@
-from tkinter import Button,Label,Frame,StringVar,Scrollbar,Text,Tk
+#from tkinter import Button,Label,Frame,StringVar,Scrollbar,Text,Tk,IntVar
+from tkinter import *
 from tkinter import ttk
 import sys
 import event
+import test
 
 root = Tk()
 root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
 root.title("哔咔收藏夹下载")
 root.geometry("800x560")
-root.protocol("WM_DELETE_WINDOW",event.close)
+orm={}
+#root.protocol("WM_DELETE_WINDOW",event.close)
 
 toolBar = Frame(root).place(relwidth=1,x=0,y=0)
 Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",command=event.huoqu).place(x=0,y=0,height=35,width=50)
@@ -18,10 +21,12 @@ Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",command=ev
 Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue",command=event.openAbout).place(relx=1,y=0,height=35,width=50,anchor="ne")
 Button(root,text="上一页",borderwidth=0,activeforeground="SkyBlue",command=event.previousPage).place(x=20,y=355)
 Button(root,text="下一页",borderwidth=0,activeforeground="SkyBlue",command=event.nextPage).place(x=180,y=355)
+#Button(root,text='暂停')
 PageT=StringVar()
 PageT.set("第 页，共 页")
 PageL=Label(root,textvariable=PageT)
 PageL.place(x=80,y=358)
+'''
 sb = Scrollbar(root)
 table=Frame(root).place(relwidth=1,x=0,y=35)
 
@@ -30,7 +35,7 @@ sb.config(command=tree_date.yview)
 sb.place(relx=1,y=35,anchor="ne",width=20,height=320)
 # 定义列
 tree_date['columns'] = ['id','name','creater','likesCount','pagesCount','epsCount',"download"]
-tree_date.place(x=0,y=35,width=780,height=320)
+tree_date.place(x=30,y=35,width=750,height=320)
 
 # 设置列宽度
 tree_date.column('id',width=0)
@@ -49,17 +54,19 @@ tree_date.heading('epsCount',text='章节数')
 tree_date.heading('likesCount',text='点赞数')
 tree_date.heading('download',text='状态')
 # 给表格中添加数据
+'''
+tree_date=test.My_Tk(root)
 pageBar=Frame(root)
 pageBar.place(relwidth=1,height=160,relx=1,rely=1,anchor="se")
 logT=Text(pageBar,bg="black",fg="white")
 logT.place(relwidth=1,height=150,relx=1,rely=1,anchor="se")
-
 event.tree=tree_date
 event.log=logT
 event.root=root
 event.page=PageT
 event.mself=event
 
+'''
 event.printl("下载程序初始化")
 event.printl("v 1.0.0   BY MUYOO")
 event.getPica()
@@ -67,4 +74,77 @@ event.checkConfig()
 event.printl("配置完成")
 
 event.download()
+/////
+heading_frame=Frame(root)
+heading_frame.pack(fill='x')
+
+#填充用
+button_frame=Label(heading_frame,width=1)
+button_frame.pack(side='left')
+#全选按钮
+all_buttonvar = IntVar()
+all_button = Checkbutton(heading_frame, text='',variable=all_buttonvar)
+all_button.pack(side=LEFT)
+all_buttonvar.set(0)
+
+columns = ['名称', '作者', '页数', '章节数', '点赞数','状态']
+widths = [130, 100, 100, 100, 100, 100]
+
+#重建tree的头
+for i in range(len(columns)):
+    Label(heading_frame,text=columns[i],width=int(widths[i]*0.16),anchor='center',relief=GROOVE).pack(side=LEFT)
+
+#放置 canvas、滚动条的frame
+canvas_frame=Frame(root,width=600,height=400,bg='red')
+canvas_frame.pack(fill=X)
+
+#只剩Canvas可以放置treeview和按钮，并且跟滚动条配合
+canvas=Canvas(canvas_frame,width=500,height=400,bg='blue',scrollregion=(0,0,500,400))
+canvas.pack(side=LEFT,fill=BOTH,expand=1)
+
+#滚动条
+ysb = Scrollbar(canvas_frame, orient=VERTICAL, command=canvas.yview)
+canvas.configure(yscrollcommand=ysb.set)
+ysb.pack(side=RIGHT, fill=Y)
+#!!!!=======重点：鼠标滚轮滚动时，改变的页面是canvas 而不是treeview
+canvas.bind_all("<MouseWheel>",lambda event:canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
+
+
+#想要滚动条起效，得在canvas创建一个windows(frame)！！
+tv_frame=Frame(canvas,bg='green')
+tv_frame2=canvas.create_window(0, 0, window=tv_frame, anchor='nw',width=600,height=400)#anchor该窗口在左上方
+
+#放置button的frame
+button_frame=Frame(tv_frame,bg='plum')
+button_frame.pack(side=LEFT, fill=Y)
+Label(button_frame,width=3).pack()  #填充用
+
+#创建treeview
+tv = ttk.Treeview(tv_frame, height=10, columns=columns, show='headings')#height好像设定不了行数，实际由插入的行数决定
+tv.pack(expand=1, side=LEFT, fill=BOTH)
+#设定每一列的属性
+for i in range(len(columns)):
+    tv.column(columns[i], width=0, minwidth=widths[i], anchor='center', stretch=True)
+
+
+#设定treeview格式
+# import tkinter.font as tkFont
+# ft = tkFont.Font(family='Fixdsys', size=20, weight=tkFont.BOLD)
+tv.tag_configure('oddrow', font='Arial 12')                    #设定treeview里字体格式font=ft
+tv.tag_configure('select', background='SkyBlue',font='Arial 12')#当对应的按钮被打勾，那么对于的行背景颜色改变！
+rowheight=27                                       #很蛋疼，好像tkinter里只能用整数！
+ttk.Style().configure('Treeview', rowheight=rowheight)      #设定每一行的高度
+
+# 设定选中的每一行字体颜色、背景颜色 (被选中时，没有变化)
+ttk.Style().map("Treeview",
+            foreground=[ ('focus', 'black'), ],
+            background=[ ('active', 'white')]
+            )
+def select_tree(event):
+
+    select_item=tv.focus()
+    button = orm[select_item][0]
+    button.invoke()  #改变对应按钮的状态，而且调用其函数
+tv.bind('<<TreeviewSelect>>', select_tree) #绑定tree选中时的回调函数
+'''
 root.mainloop()
