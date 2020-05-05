@@ -29,6 +29,10 @@ def printl(text):
     log.insert('end',text+'\n')
     log.see('end')
 
+#-----列表控制-----
+def insertList(data):
+    tree.insert_tv(data)
+
 #-----配置设置-----
 
 #将配置导入全局设置
@@ -188,16 +192,16 @@ def downloadPage():
 
 #刷新列表下载状态
 def refresh():
-    for item in tree.get_children():
-        tem=tree.set(item,'id')
+    for item in tree.getTree().get_children():
+        tem=tree.getTree().set(item,'id')
         print(tem)
         print()
         if tem==getdowning(): 
-            tree.set(item,'download','下载中...')
+            tree.getTree().set(item,'download','下载中...')
         if isDownloaded(tem):
-            tree.set(item,'download','已下载')
+            tree.getTree().set(item,'download','已下载')
         if isInDownloadList(tem):
-            tree.set(item,'download','等待下载')
+            tree.getTree().set(item,'download','等待下载')
 
 def close():
     downloadThred.stop()

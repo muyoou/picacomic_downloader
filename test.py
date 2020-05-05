@@ -71,8 +71,8 @@ class My_Tk():
         #设定treeview格式
         # import tkinter.font as tkFont
         # ft = tkFont.Font(family='Fixdsys', size=20, weight=tkFont.BOLD)
-        self.tv.tag_configure('oddrow', font='Arial 12')                    #设定treeview里字体格式font=ft
-        self.tv.tag_configure('select', background='SkyBlue',font='Arial 12')#当对应的按钮被打勾，那么对于的行背景颜色改变！
+        self.tv.tag_configure('oddrow')                    #设定treeview里字体格式font=ft
+        self.tv.tag_configure('select', background='SkyBlue')#当对应的按钮被打勾，那么对于的行背景颜色改变！
         self.rowheight=27                                       #很蛋疼，好像tkinter里只能用整数！
         Style().configure('Treeview', rowheight=self.rowheight)      #设定每一行的高度
  
@@ -83,8 +83,17 @@ class My_Tk():
                   )
         self.tv.bind('<<TreeviewSelect>>', self.select_tree) #绑定tree选中时的回调函数
  
+    def getTree(self):
+        return self.tv
  
- 
+    def delALl(self):
+        #清空tree、checkbutton
+        items = self.tv.get_children()
+        [self.tv.delete(item) for item in items]
+        self.tv.update()
+        for child in self.button_frame.winfo_children()[1:]: #第一个构件是label，所以忽略
+            child.destroy()
+
     def insert_tv(self,data):
         #清空tree、checkbutton
         items = self.tv.get_children()
@@ -95,7 +104,7 @@ class My_Tk():
         #重设tree、button对应关系
         self.orm={}
         for item in data:
-            tv_item=self.tv.insert('','end',values=(item.get('_id',''),item.get('title',''),item.get('author',''),item.get('likesCount',''),item.get('pagesCount',''),item.get('epsCount',''),''))
+            tv_item=self.tv.insert('','end',values=(item.get('title',''),item.get('author',''),item.get('likesCount',''),item.get('pagesCount',''),item.get('epsCount',''),''))
             import tkinter
             ck_button = tkinter.Checkbutton(self.button_frame,variable=IntVar())
             ck_button['command']=lambda item=tv_item:self.select_button(item)
@@ -112,7 +121,7 @@ class My_Tk():
             '''
         #每次点击插入tree，先设定全选按钮不打勾，接着打勾并且调用其函数
         self.all_buttonvar.set(0)
-        self.all_button.invoke()
+        #self.all_button.invoke()
  
         #更新canvas的高度
         height = (len(self.tv.get_children()) + 1) * self.rowheight  # treeview实际高度

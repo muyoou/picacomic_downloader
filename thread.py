@@ -13,18 +13,23 @@ class myThread (threading.Thread):
         self.event.threadaState=1
         if self.mpica.login() == 1:
             input("error")
+        '''
         delList=self.tree_date.get_children()
         for item in delList:
             self.tree_date.delete(item)
-        tmp=0
+            '''
+        #tmp=0
         #tmp2=1
         self.event.printl("获取收藏夹信息中...")
         #while True:
         self.mpica.getPage(self.page)
         #self.mpica.allInfo.extend(self.mpica.allComicInfo)
+        self.event.insertList(self.mpica.allComicInfo)
+        '''
         for item in self.mpica.allComicInfo:
             self.tree_date.insert('',tmp,values=(item.get('_id',''),item.get('title',''),item.get('author',''),item.get('likesCount',''),item.get('pagesCount',''),item.get('epsCount',''),''))
             tmp+=1
+        '''
         #if tmp2==self.mpica.pageNum:break
         #else:tmp2+=1
         #    break
