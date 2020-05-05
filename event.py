@@ -197,11 +197,13 @@ def refresh():
         print(tem)
         print()
         if tem==getdowning(): 
-            tree.getTree().set(item,'download','下载中...')
-        if isDownloaded(tem):
-            tree.getTree().set(item,'download','已下载')
-        if isInDownloadList(tem):
-            tree.getTree().set(item,'download','等待下载')
+            tree.getTree().set(item,'状态','下载中...')
+        elif isDownloaded(tem):
+            tree.getTree().set(item,'状态','已下载')
+        elif isInDownloadList(tem):
+            tree.getTree().set(item,'状态','等待下载')
+        else:
+            tree.getTree().set(item,'状态','未下载')
 
 def close():
     downloadThred.stop()

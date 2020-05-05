@@ -10,22 +10,16 @@ root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
 root.title("哔咔收藏夹下载")
 root.geometry("800x560")
-orm={}
-#root.protocol("WM_DELETE_WINDOW",event.close)
+root.protocol("WM_DELETE_WINDOW",event.close)
 
-toolBar = Frame(root).place(relwidth=1,x=0,y=0)
-Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",command=event.huoqu).place(x=0,y=0,height=35,width=50)
-Button(toolBar,text="下载此页",borderwidth=0,activeforeground="SkyBlue",command=event.downloadPage).place(x=55,y=0,height=35,width=50)
-Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",command=event.openfolder).place(x=120,y=0,height=35,width=60)
-Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",command=event.openMenu).place(x=190,y=0,height=35,width=50)
-Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue",command=event.openAbout).place(relx=1,y=0,height=35,width=50,anchor="ne")
-Button(root,text="上一页",borderwidth=0,activeforeground="SkyBlue",command=event.previousPage).place(x=20,y=355)
-Button(root,text="下一页",borderwidth=0,activeforeground="SkyBlue",command=event.nextPage).place(x=180,y=355)
-#Button(root,text='暂停')
-PageT=StringVar()
-PageT.set("第 页，共 页")
-PageL=Label(root,textvariable=PageT)
-PageL.place(x=80,y=358)
+toolBar = Frame(root)
+toolBar.pack(fill=X)
+Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",padx=5,width=5,height=2,command=event.huoqu).pack(side=LEFT)
+Button(toolBar,text="下载此页",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.downloadPage).pack(side=LEFT)
+Button(toolBar,text="打开文件夹",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.openfolder).pack(side=LEFT)
+Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.openMenu).pack(side=LEFT)
+Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue",padx=10,height=2,command=event.openAbout).pack(side=RIGHT)
+
 '''
 sb = Scrollbar(root)
 table=Frame(root).place(relwidth=1,x=0,y=35)
@@ -56,6 +50,17 @@ tree_date.heading('download',text='状态')
 # 给表格中添加数据
 '''
 tree_date=test.My_Tk(root)
+pageSetBar=Frame(root)
+pageSetBar.pack(fill=X)
+Button(pageSetBar,text="上一页",borderwidth=0,activeforeground="SkyBlue",padx=10,height=2,command=event.previousPage).pack(side=LEFT)
+PageT=StringVar()
+PageT.set("第 页，共 页")
+PageL=Label(pageSetBar,textvariable=PageT,padx=10)
+PageL.pack(side=LEFT)
+Button(pageSetBar,text="下一页",borderwidth=0,activeforeground="SkyBlue",padx=10,height=2,command=event.nextPage).pack(side=LEFT)
+#Button(root,text='暂停')
+
+
 pageBar=Frame(root)
 pageBar.place(relwidth=1,height=160,relx=1,rely=1,anchor="se")
 logT=Text(pageBar,bg="black",fg="white")
@@ -65,7 +70,6 @@ event.log=logT
 event.root=root
 event.page=PageT
 event.mself=event
-
 
 event.printl("下载程序初始化")
 event.printl("v 1.0.0   BY MUYOO")

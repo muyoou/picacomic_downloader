@@ -5,7 +5,7 @@ class My_Tk():
     def __init__(self,mytk):
         self.tk=mytk
         self.orm={}
-        self.create_button()
+        #self.create_button()
         self.create_heading()
         self.create_tv()
  
@@ -26,8 +26,8 @@ class My_Tk():
         self.all_button.pack(side=LEFT)
         self.all_buttonvar.set(0)
  
-        self.columns = ['名称', '作者', '页数', '章节数', '点赞数','状态']
-        self.widths = [260, 150, 65, 65, 65,65]
+        self.columns = ['id','名称', '作者', '页数', '章节数', '点赞数','状态']
+        self.widths = [0,260, 150, 65, 65, 65,65]
  
         #重建tree的头
         for i in range(len(self.columns)):
@@ -104,7 +104,7 @@ class My_Tk():
         #重设tree、button对应关系
         self.orm={}
         for item in data:
-            tv_item=self.tv.insert('','end',values=(item.get('title',''),item.get('author',''),item.get('likesCount',''),item.get('pagesCount',''),item.get('epsCount',''),''))
+            tv_item=self.tv.insert('','end',values=(item.get('_id',''),item.get('title',''),item.get('author',''),item.get('likesCount',''),item.get('pagesCount',''),item.get('epsCount',''),''))
             import tkinter
             ck_button = tkinter.Checkbutton(self.button_frame,variable=IntVar())
             ck_button['command']=lambda item=tv_item:self.select_button(item)
