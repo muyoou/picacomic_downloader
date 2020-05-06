@@ -47,8 +47,9 @@ class downThread (threading.Thread):
     def run(self):
         while True:
             time.sleep(1)
-            if len(self.mpica.dolwnloadList)!=0:
-                self.mpica.downloadFirstComic()
+            if self.event.isStartDownload==1:
+                if len(self.mpica.dolwnloadList)!=0:
+                    self.mpica.downloadFirstComic()
             if self.stopped():
                 print('下载线程关闭')
                 break

@@ -135,7 +135,13 @@ class pica():
 
     #通过图片信息下载图片
     def getPic(self,picture,savepath):
-        print(str(picture['fileServer'])+"/static/"+str(picture['path']))
+        if self.event.isStartDownload==0:
+            self.event.printl('下载已暂停')
+            while True:
+                time.sleep(1)
+                if self.event.isStartDownload==1:
+                    break
+        print("正在下载："+str(picture['fileServer'])+"/static/"+str(picture['path']))
         if not fileManager.isExist(savepath):
             return self.mrp.sendPost(str(picture['fileServer'])+"/static/"+str(picture['path']),savepath,"img",self.mytoken)
         else:
@@ -192,18 +198,24 @@ class pica():
         for item in data:
             selectComic=self.allComicInfo[item-1]
             print(selectComic['title'])
-            if not self.event.isDownloaded(selectComic['_id']) and not selectComic in self.dolwnloadList:
+            if not self.event.isDownloaded(selectComic['_id']) and not selectComic in self.dolwnloadList and not selectComic == self.comicInfo:
                 self.dolwnloadList.append(selectComic)
+            else:
+                self.event.printl('已存在或者正在下载：'+selectComic['title'])
+        self.event.printl('已经添加到下载列表！')
                 
 
     #下载列表中的第一个漫画
     def downloadFirstComic(self):
-        self.comicInfo=self.dolwnloadList.pop(0)
+        self.comicInfo=self.dolwnloadList[0]
+        self.event.fristStartDownload()
         d.Downloading=self.comicInfo['_id']
         self.event.refresh()
         self.allEpsInfo=self.getComicEps()
         self.getComicPic()
         d.Downloading=''
+        self.dolwnloadList.pop(0)
+        self.event.finishDownload()
         self.event.refresh()
 
 '''

@@ -16,6 +16,8 @@ threadaState=0
 setboxState=0
 aboutState=0
 downloadThred=None
+DownloadStateList=()
+isStartDownload=1
 
 #获取pica类
 def getPica():
@@ -186,13 +188,56 @@ def download():
     thread1.start()
     downloadThred=thread1
 
+#暂停下载
+def PauseDownload():
+    global isStartDownload
+    if isStartDownload == 1:
+        isStartDownload=0
+        printl("暂停下载中")
+        DownloadStateList[0].pack_forget()
+        DownloadStateList[1].pack(side='right')
+        refreshStatus(False)
+
+#继续下载
+def startDownload():
+    global isStartDownload
+    if isStartDownload == 0:
+        isStartDownload=1
+        printl('下载继续')
+        DownloadStateList[1].pack_forget()
+        DownloadStateList[0].pack(side='right')
+        refreshStatus(True)
+
+#初始化下载 
+def fristStartDownload():
+    DownloadStateList[0].pack(side='right')
+    refreshStatus(True)
+
+#下载完成
+def finishDownload():
+    DownloadStateList[0].pack_forget()
+    refreshStatus(False)
+
+def refreshStatus(status):
+    tmp=len(mpica.dolwnloadList)
+    if status == True:
+        DownloadStateList[2].set('下载中 有%d个漫画等待下载'%tmp)
+    else:
+        if tmp!=0:
+            DownloadStateList[2].set('暂停中 有%d个漫画等待下载'%tmp)
+        else:
+            DownloadStateList[2].set('闲置中')
+
 #下载此页
 def downloadPage():
     mpica.putNowPagePicToList()
 
 #下载选中
 def downloadSelected():
+    refresh()
     mpica.putSelectPicToList(tree.getSelected())
+    refreshStatus(True if isStartDownload==1 else False)
+    refresh()
 
 #刷新列表下载状态
 def refresh():

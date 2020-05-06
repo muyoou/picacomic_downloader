@@ -26,7 +26,7 @@ class My_Tk():
         self.all_button.pack(side=LEFT)
         self.all_buttonvar.set(0)
  
-        self.columns = ['id','名称', '作者', '页数', '章节数', '点赞数','状态']
+        self.columns = ['id','名称', '作者', '点赞数', '页数', '章节数','状态']
         self.widths = [0,260, 150, 65, 65, 65,65]
  
         #重建tree的头
