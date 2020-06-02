@@ -3,7 +3,7 @@
 > 版本1.1更新，增加了多选下载和暂停
 
 ### 下载地址：  
-[点击下载 v1.0测试版](https://www.muyoo.top/index.php/archives/61/)  
+[点击下载 v1.1](https://www.muyoo.top/index.php/archives/61/)  
 
 ### 哔咔API：  
 [查看哔咔API](https://www.muyoo.top/index.php/archives/4/)  
