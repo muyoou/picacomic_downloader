@@ -49,3 +49,7 @@ def createNewFile(filename):
 def saveImg(img,path):
     if not isExist(path):
         open(path, 'wb').write(img)
+
+def removeToken():
+    if isExist(".\\data\\token.dat"):
+        os.remove(".\\data\\token.dat")

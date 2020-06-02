@@ -131,7 +131,8 @@ def setNowPage(nowp):
 #-----错误处理-----
 def checkError(input):
     if input==-1:
-        printl("----------------\n连接超时！")
+        printl("----------------\n连接超时！正在尝试重新登录...")
+        reLogin()
         return False
     elif input==-2:
         printl("----------------\n连接错误！请检查你的网络，是否能连接到哔咔服务器")
@@ -141,6 +142,11 @@ def checkError(input):
         printl("----------------\n代理错误！请检查设置中的代理设置。如不需要代理，请保持空值")
         return False
     else: return True
+
+#重新登录
+def reLogin():
+    fileManager.removeToken()
+    mpica.loginByWeb()
 
 #-----事件方法-----
 
