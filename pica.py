@@ -43,7 +43,7 @@ class pica():
 
     #用于尝试使用token和密码登录
     def login(self):
-        self.event.printl("开始登录")
+        self.event.printl("验证登录")
         if self.loginByFile()!=0:
             self.loginByWeb()
 
@@ -124,7 +124,19 @@ class pica():
     #可以通过comicid获取，也可以直接使用当前的漫画号
     def getComicEps(self,comicid=None):
         comicid=self.isNone(comicid,self.comicInfo['_id'])
-        return self.mrp.sendPost("comics/"+str(comicid)+"/eps?page=1",None,"GET",self.mytoken).json()['data']['eps']['docs']
+        firstEps=self.mrp.sendPost("comics/"+str(comicid)+"/eps?page=1",None,"GET",self.mytoken).json()['data']['eps']
+        epsNum=firstEps["total"]
+        firstEps=firstEps['docs']
+        pageItem=2
+        while True:
+            if epsNum>40:
+                print("获取")
+                firstEps+=self.mrp.sendPost("comics/"+str(comicid)+"/eps?page="+str(pageItem),None,"GET",self.mytoken).json()['data']['eps']['docs']
+                pageItem+=1
+                epsNum-=40
+            else:break
+        print(len(firstEps))
+        return firstEps
 
     #获取comicid所示漫画的epsid章节的temppage分页中的所有图片信息
     def getCPage(self,temppage=None,comicid=None,epsid=None):
