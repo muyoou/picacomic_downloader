@@ -4,6 +4,7 @@ import json
 def mkdir(path):
     isExists=os.path.exists(path)
     if not isExists:
+        print(path)
         os.makedirs(path) 
         return True
     else:
@@ -40,7 +41,6 @@ def readDownloaded():
 def updataDownloaded(input):
     with open('.\\data\\downloaded.json', 'w') as f:
         json.dump(input,f,ensure_ascii=False)
-
 
 def createNewFile(filename):
     fd = open(filename, mode="w", encoding="utf-8")

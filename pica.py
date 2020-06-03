@@ -51,7 +51,6 @@ class pica():
     def loginByFile(self):
         if fileManager.isExist(".\\data\\token.dat"):
             self.mytoken=fileManager.readToken()
-            print (self.mytoken)
             #return self.testConn()
             return 0
         else: return 1
@@ -60,14 +59,12 @@ class pica():
     def loginByWeb(self):
         self.event.printl('尝试使用密码登录中...')
         output=self.mrp.sendPost("auth/sign-in",{"email":d.Email,"password":d.Password},"POST")
-        print("结果："+str(output))
         if not self.event.checkError(output):
             self.event.printl("将在5秒后重试")
             time.sleep(5)
             self.loginByWeb()
         else:
             output=output.json()
-        print(output)
         try:
             if output['message'] == 'invalid email or password':
                 self.event.printl("-------------\n用户名或密码错误！请在设置中更改")
@@ -95,6 +92,10 @@ class pica():
         if(not input):return other
         else : return input
 
+    #用来检测漫画名中是否有非法字符，是则替换
+    def haveIllegalChar(self,input):
+        return input.replace("\\", "").replace("/","").replace(":", "").replace("*", "").replace("?", "").replace("\"","").replace("<","").replace(">","").replace("|","").replace(" ","")
+
     #获取这一页的收藏夹里的所有漫画信息，并导出到allComicInfo
     def getPage(self,index=None):
         index=self.isNone(index,self.index)
@@ -105,7 +106,6 @@ class pica():
             self.getPage(index)
         else:
             tmp=tmp.json()['data']['comics']
-            print('json:'+str(tmp))
         if self.pageNum==-1:
             self.pageNum=int(tmp['pages'])
         try:
@@ -130,12 +130,10 @@ class pica():
         pageItem=2
         while True:
             if epsNum>40:
-                print("获取")
                 firstEps+=self.mrp.sendPost("comics/"+str(comicid)+"/eps?page="+str(pageItem),None,"GET",self.mytoken).json()['data']['eps']['docs']
                 pageItem+=1
                 epsNum-=40
             else:break
-        print(len(firstEps))
         return firstEps
 
     #获取comicid所示漫画的epsid章节的temppage分页中的所有图片信息
@@ -153,11 +151,9 @@ class pica():
                 time.sleep(1)
                 if self.event.isStartDownload==1:
                     break
-        print("正在下载："+str(picture['fileServer'])+"/static/"+str(picture['path']))
         if not fileManager.isExist(savepath):
             return self.mrp.sendPost(str(picture['fileServer'])+"/static/"+str(picture['path']),savepath,"img",self.mytoken)
         else:
-            print('图片已存在！')
             return 1
 
     #获取一张图片的保存路径及文件名
@@ -188,7 +184,7 @@ class pica():
         comic=self.isNone(comic,self.comicInfo)
         eps=self.isNone(eps,self.epsInfo)
         id=self.isNone(id,self.index)
-        return "./comic/"+str(comic['title'])+"/"+str(eps['title'])
+        return "./comic/"+self.haveIllegalChar(str(comic['title']))+"/"+self.haveIllegalChar(str(eps['title']))
 
     #直接下载一个漫画中的所有图片
     def getComicPic(self):
@@ -209,7 +205,6 @@ class pica():
     def putSelectPicToList(self,data):
         for item in data:
             selectComic=self.allComicInfo[item-1]
-            print(selectComic['title'])
             if not self.event.isDownloaded(selectComic['_id']) and not selectComic in self.dolwnloadList and not selectComic == self.comicInfo:
                 self.dolwnloadList.append(selectComic)
             else:

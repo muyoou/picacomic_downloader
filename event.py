@@ -249,8 +249,6 @@ def downloadSelected():
 def refresh():
     for item in tree.getTree().get_children():
         tem=tree.getTree().set(item,'id')
-        print(tem)
-        print()
         if tem==getdowning(): 
             tree.getTree().set(item,'状态','下载中...')
         elif isDownloaded(tem):
