@@ -52,4 +52,4 @@ def saveImg(img,path):
 
 def removeToken():
     if isExist(".\\data\\token.dat"):
-        os.remove(".\\data\\token.dat")
+        os.unlink(".\\data\\token.dat")
