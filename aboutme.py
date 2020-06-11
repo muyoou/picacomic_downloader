@@ -20,7 +20,7 @@ class about():
         imgLabel.place(x=20,y=20,width=50,height=50)
         Label(t2,text='muyoo',font=('Microsoft YaHei UI',20),fg="RoyalBlue").place(x=80,y=13)
         Label(t2,text='一个摸鱼的伪技术宅',font=('Microsoft YaHei UI',10),fg="RoyalBlue").place(x=80,y=52)
-        Label(t2,text="v 1.1 正式版").place(x=180,y=90)
+        Label(t2,text="v 1.4 正式版").place(x=180,y=90)
         Button(t2,text="查看更多...",borderwidth=0,bg="RoyalBlue",fg="white",command=self.goto).place(x=0,y=120,relw=1,height=50)
     def goto(self):
         web.open("https://www.muyoo.top")

@@ -4,6 +4,8 @@
 Email=''
 #密码
 Password=''
+#是否使用代理
+useProxy=False
 #代理地址
 Proxy=''
 #app版本

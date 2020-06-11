@@ -43,6 +43,7 @@ def setConfig(data):
     d.Password=data['password']
     d.Proxy=data['proxy']
     d.Image_quality=data['quality']
+    d.useProxy=data['useProxy']
 
 #从配置文件中读取配置
 def getConfigByFile():

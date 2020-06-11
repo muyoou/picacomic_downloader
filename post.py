@@ -10,7 +10,7 @@ urllib3.disable_warnings()
 class mrequest():
 
     def __init__(self):
-        if not d.Proxy=='':
+        if d.useProxy:
             self.proxies = {
                     "http": d.Proxy,
                     "https": d.Proxy,
