@@ -45,7 +45,10 @@ class mrequest():
                         try:
                                 self.__init__()
                                 print(self.proxies)
-                                r = requests.post(url,headers=headers,data=json.dumps(payload),verify=False,proxies=self.proxies)
+                                if d.useProxy:
+                                        r = requests.post(url,headers=headers,data=json.dumps(payload),verify=False,proxies=self.proxies)
+                                else:
+                                        r = requests.post(url,headers=headers,data=json.dumps(payload),verify=False)
                         except requests.exceptions.ProxyError:
                                 print("代理错误")
                                 return -3
