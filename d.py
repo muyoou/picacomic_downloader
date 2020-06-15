@@ -11,7 +11,7 @@ Proxy=''
 #app版本
 Version='2.2.1.3.3.4'
 #图片质量
-Image_quality=''
+Image_quality='high'
 #编译版本
 Build_version='45'
 #密钥

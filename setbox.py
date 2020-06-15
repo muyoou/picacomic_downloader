@@ -22,7 +22,7 @@ class setbox ():
         Label(t2, text='下载图片质量', width=10, height=1).place(x=10,y=90)
         ttk.Separator(t2,orient='horizontal').place(x=10,y=150,width=240)
         self.var = StringVar()
-        self.var.set('high')
+        self.var.set(d.Image_quality)
         self.useProxy = BooleanVar()
         self.useProxy.set(d.useProxy)
         self.e1=Entry(t2)
@@ -47,7 +47,7 @@ class setbox ():
     def closeWindow(self):
         self.event.setboxState=0
         self.t2.destroy()
-
+ 
     def usedProxy(self):
         if self.useProxy.get() == False:
             self.e2.config(state=DISABLED)
