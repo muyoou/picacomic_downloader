@@ -58,13 +58,9 @@ class pica():
     #使用密码登录，并保存token
     def loginByWeb(self):
         self.event.printl('尝试使用密码登录中...')
-        output=self.mrp.sendPost("auth/sign-in",{"email":d.Email,"password":d.Password},"POST")
-        if not self.event.checkError(output):
-            self.event.printl("将在5秒后重试")
-            time.sleep(5)
-            self.loginByWeb()
-        else:
-            output=output.json()
+        print("密码")
+        print(d.Password)
+        output=self.sendPost("auth/sign-in",{"email":d.Email,"password":d.Password},"POST").json()
         try:
             if output['message'] == 'invalid email or password':
                 self.event.printl("-------------\n用户名或密码错误！请在设置中更改")
@@ -78,15 +74,6 @@ class pica():
         except TypeError:
             self.login()
 
-    #测试能否连接，-1为失败，0为成功
-    def testConn(self):
-        if self.mrp.sendPost("categories",None,"GET",self.mytoken) == -1:
-            self.event.printl("登录超时！")
-            return -1
-        else:
-            self.event.printl("登录成功！")
-            return 0
-
     #用来检测input值是否为空，是则返回other值
     def isNone(self,input,other):
         if(not input):return other
@@ -99,19 +86,10 @@ class pica():
     #获取这一页的收藏夹里的所有漫画信息，并导出到allComicInfo
     def getPage(self,index=None):
         index=self.isNone(index,self.index)
-        tmp=self.mrp.sendPost("users/favourite?s=dd&page="+str(index),None,"GET",self.mytoken)
-        if not self.event.checkError(tmp):
-            self.event.printl("将在5秒后重试")
-            time.sleep(5)
-            self.getPage(index)
-        else:
-            tmp=tmp.json()['data']['comics']
+        tmp=self.sendPost("users/favourite?s=dd&page="+str(index),None,"GET",self.mytoken).json()['data']['comics']
         if self.pageNum==-1:
             self.pageNum=int(tmp['pages'])
-        try:
-            self.allComicInfo = tmp['docs']
-        except TypeError:
-            self.getPage(index)
+        self.allComicInfo = tmp['docs']
         for item in self.allComicInfo:
             if self.event.isDownloaded(item['_id']):
                 item['download']=True
@@ -124,13 +102,18 @@ class pica():
     #可以通过comicid获取，也可以直接使用当前的漫画号
     def getComicEps(self,comicid=None):
         comicid=self.isNone(comicid,self.comicInfo['_id'])
-        firstEps=self.mrp.sendPost("comics/"+str(comicid)+"/eps?page=1",None,"GET",self.mytoken).json()['data']['eps']
+        firstEps=self.sendPost("comics/"+str(comicid)+"/eps?page=1",None,"GET",self.mytoken)
+        if not self.event.checkError(firstEps):
+            self.event.printl("将在5秒后重试")
+            time.sleep(5)
+            self.getComicEps(comicid)
+        else: firstEps=firstEps.json()['data']['eps']
         epsNum=firstEps["total"]
         firstEps=firstEps['docs']
         pageItem=2
         while True:
             if epsNum>40:
-                firstEps+=self.mrp.sendPost("comics/"+str(comicid)+"/eps?page="+str(pageItem),None,"GET",self.mytoken).json()['data']['eps']['docs']
+                firstEps+=self.sendPost("comics/"+str(comicid)+"/eps?page="+str(pageItem),None,"GET",self.mytoken).json()['data']['eps']['docs']
                 pageItem+=1
                 epsNum-=40
             else:break
@@ -141,7 +124,7 @@ class pica():
         comicid=self.isNone(comicid,self.comicInfo['_id'])
         epsid=self.isNone(epsid,self.epsID)
         temppage=self.isNone(temppage,self.temID)
-        return self.mrp.sendPost("comics/"+str(comicid)+"/order/"+str(epsid)+"/pages?page="+str(temppage),None,"GET",self.mytoken).json()['data']['pages']
+        return self.sendPost("comics/"+str(comicid)+"/order/"+str(epsid)+"/pages?page="+str(temppage),None,"GET",self.mytoken).json()['data']['pages']
 
     #通过图片信息下载图片
     def getPic(self,picture,savepath):
@@ -152,7 +135,9 @@ class pica():
                 if self.event.isStartDownload==1:
                     break
         if not fileManager.isExist(savepath):
-            return self.mrp.sendPost(str(picture['fileServer'])+"/static/"+str(picture['path']),savepath,"img",self.mytoken)
+            tmp = self.mrp.sendPost(str(picture['fileServer'])+"/static/"+str(picture['path']),savepath,"img",self.mytoken)
+            if not self.event.checkError(tmp):
+                self.event.printl("此张图片已被搁置，可以在失败记录中重新下载")
         else:
             return 1
 
@@ -225,19 +210,12 @@ class pica():
         self.event.finishDownload()
         self.event.refresh()
 
-'''
-    #下载下载列表里的所有漫画
-    def getListPic(self):
-        for self.comicInfo in self.dolwnloadList:
-            d.Downloading=self.comicInfo['_id']
-            self.allEpsInfo=self.getComicEps()
-            self.getComicPic()
-
-    #示例：下载第一页的第一个漫画
-    def start2(self):
-        self.index=1
-        self.getPage()
-        self.comicInfo=S.allComicInfo[0]
-        self.allEpsInfo=S.getComicEps()
-        self.getComicPic()
-'''
+    #带有错误处理的重复请求方法
+    def sendPost(self, nurl, payload, mothed, auth=""):
+        while True:
+            tmp=self.mrp.sendPost(nurl, payload, mothed, auth)
+            if not self.event.checkError(tmp):
+                self.event.printl("将在5秒后重试")
+                time.sleep(5)
+            else:
+                return tmp

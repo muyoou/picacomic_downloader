@@ -142,9 +142,15 @@ def checkError(input):
     elif input==-3:
         printl("----------------\n代理错误！请检查设置中的代理设置。如不需要代理，请保持空值")
         return False
+    elif input==-4:
+        print("-----------------\n发生未知错误！尚没有适配的错误处理")
+        return False
+    elif input==-5:
+        print("-----------------\n多次重连失败，超过重连次数。请检查网络或更改重连次数")
+        return False
     else: return True
 
-#重新登录
+#重新登录 
 def reLogin():
     fileManager.removeToken()
     mpica.loginByWeb()

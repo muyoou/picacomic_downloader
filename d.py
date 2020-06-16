@@ -23,6 +23,10 @@ GetNum=3
 PostNum=3
 #图片下载最多重连次数
 ImaConnNum=5
+#数据超时时间
+Timeout=10
+#图片超时时间
+imgTimeout=15
 
 #-----自动生成-----
 Token=''

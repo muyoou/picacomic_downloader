@@ -40,7 +40,7 @@ class My_Tk():
         canvas_frame.pack(fill=X)
  
         #只剩Canvas可以放置treeview和按钮，并且跟滚动条配合
-        self.canvas=Canvas(canvas_frame,width=400,height=300,scrollregion=(0,0,500,300),bg='red')
+        self.canvas=Canvas(canvas_frame,width=400,height=300,scrollregion=(0,0,500,300))
         self.canvas.pack(side=LEFT,fill=BOTH,expand=1)
         #滚动条
         ysb = Scrollbar(canvas_frame, orient=VERTICAL, command=self.canvas.yview)
@@ -66,7 +66,6 @@ class My_Tk():
         #设定每一列的属性
         for i in range(len(self.columns)):
             self.tv.column(self.columns[i], width=self.widths[i], anchor='n', stretch=True)
- 
  
         #设定treeview格式
         # import tkinter.font as tkFont
