@@ -19,6 +19,7 @@ aboutState=0
 downloadThred=None
 #下载的两个下载状态组件列表
 DownloadStateList=()
+#下载是在暂停、取消还是在正常状态
 isStartDownload=1
 #正在下载中的那个漫画列组件
 downloadingList=None
@@ -164,6 +165,7 @@ def reLogin():
 def openfolder():
     fileManager.openFile(".\\comic")
 
+
 #打开设置窗口
 def openMenu():
     if setboxState==0:
@@ -209,7 +211,7 @@ def PauseDownload():
     global isStartDownload
     if isStartDownload == 1:
         isStartDownload=0
-        printl("暂停下载中")
+        printl("暂停下载中,等待当前图片加载完成")
         DownloadStateList[0].pack_forget()
         DownloadStateList[1].pack(side='right')
         refreshStatus(False)
@@ -248,6 +250,14 @@ def refreshStatus(status):
 def downloadPage():
     mpica.putNowPagePicToList()
 
+#取消下载选中
+def cancelSelected():
+    refreshCancer()
+    mpica.cancelSectctInList(tree.getSelected())
+    refreshStatus(True if isStartDownload==1 else False)
+    tree.cancelAll()
+    refresh()
+
 #下载选中
 def downloadSelected():
     refresh()
@@ -263,7 +273,6 @@ def refresh():
         tem=tree.getTree().set(item,'id')
         if tem==getdowning(): 
             downloadingList=item
-            tree.getTree().set(item,'状态','下载中...')
         elif isDownloaded(tem):
             tree.getTree().set(item,'状态','已下载')
         elif isInDownloadList(tem):
@@ -271,9 +280,17 @@ def refresh():
         else:
             tree.getTree().set(item,'状态','未下载')
 
+#刷新获取信息提示
+def refreshBefore():
+    tree.getTree().set(downloadingList,'状态','获取信息中')
+
+#刷新取消中提示
+def refreshCancer():
+    tree.getTree().set(downloadingList,'状态','取消中')
+
 #刷新下载中的百分比
 def refreshRate(rate):
-    tree.getTree().set(downloadingList,'状态',str(rate)+'%')
+    tree.getTree().set(downloadingList,'状态','下载'+str(rate)+'%')
 
 def close():
     downloadThred.stop()

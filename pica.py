@@ -136,6 +136,8 @@ class pica():
                 time.sleep(1)
                 if self.event.isStartDownload==1:
                     break
+        elif self.event.isStartDownload==2:
+            return -1
         if not fileManager.isExist(savepath):
             tmp = self.mrp.sendPost(str(picture['fileServer'])+"/static/"+str(picture['path']),savepath,"img",self.mytoken)
             if not self.event.checkError(tmp):
@@ -152,7 +154,8 @@ class pica():
         picnum=(self.temID-1)*40+1
         for picture in self.allCPageInfo['docs']:
             self.event.printl('- '+str(picnum)+'/'+str(self.allCPageInfo['total'])+' -- '+str(picture['media']['originalName']))
-            self.getPic(picture['media'],self.getPicSavePath(self.saveRootPath,picnum,picture['media']))
+            if self.getPic(picture['media'],self.getPicSavePath(self.saveRootPath,picnum,picture['media']))==-1:
+                return -1
             self.dolwnloadRate=int(picnum/d.DownloadingPage*100)
             self.event.refreshRate(self.dolwnloadRate)
             picnum+=1
@@ -164,7 +167,8 @@ class pica():
         self.temID=1
         while True:
             self.allCPageInfo=self.getCPage()
-            self.get40Pic()
+            if self.get40Pic()==-1:
+                return -1
             if int(self.allCPageInfo['pages'])==self.temID:break
             else : self.temID+=1
 
@@ -180,7 +184,8 @@ class pica():
         self.event.printl("开始下载："+self.comicInfo['title'])
         for self.epsInfo in self.allEpsInfo:
             self.epsID=self.epsInfo["order"]
-            self.getEpsPic()
+            if self.getEpsPic()==-1:
+                return -1
         self.event.addDownloadedList(self.comicInfo['_id'])
         self.event.printl("此漫画下载完成！")
 
@@ -199,7 +204,20 @@ class pica():
             else:
                 self.event.printl('已存在或者正在下载：'+selectComic['title'])
         self.event.printl('已经添加到下载列表！')
-                
+    
+    #将选中的漫画取消下载
+    def cancelSectctInList(self,data):
+        tmp=0
+        for item in data:
+            selectComic=self.allComicInfo[item-1]
+            if selectComic in self.dolwnloadList:
+                if selectComic == self.comicInfo:
+                    self.event.printl("取消下载中漫画...请等待当前下载的图片加载完成")
+                    self.event.isStartDownload=2
+                else:
+                    tmp+=1
+                    self.dolwnloadList.remove(selectComic)
+        self.event.printl("取消了%d个待下载漫画"%tmp)
 
     #下载列表中的第一个漫画
     def downloadFirstComic(self):
@@ -211,8 +229,15 @@ class pica():
         self.dolwnloadingNum=0
         self.dolwnloadRate=0
         self.event.refresh()
+        self.event.refreshBefore()
         self.allEpsInfo=self.getComicEps()
-        self.getComicPic()
+        if self.getComicPic()==-1:
+            d.Downloading=''
+            self.dolwnloadList.pop(0)
+            self.event.isStartDownload=1
+            self.event.printl("下载中漫画已取消")
+            self.event.refresh()
+            return -1
         d.Downloading=''
         self.dolwnloadList.pop(0)
         self.event.finishDownload()

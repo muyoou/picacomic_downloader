@@ -142,7 +142,11 @@ class mrequest():
                     continue
                 except requests.exceptions.ConnectionError:
                     print("连接错误")
-                    return -2
+                    getnum += 1
+                    if getnum > d.ImaConnNum:
+                        return -2
+                    time.sleep(1)
+                    continue
                 except requests.exceptions.RequestException as e:
                     print(e)
                     print("读写超时")
