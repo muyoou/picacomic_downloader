@@ -24,7 +24,7 @@ PostNum=3
 #图片下载最多重连次数
 ImaConnNum=5
 #数据超时时间
-Timeout=10
+Timeout=20
 #图片超时时间
 imgTimeout=15
 
@@ -38,3 +38,5 @@ nowPage=1
 AllPage=0
 #正在下载的文件
 Downloading=''
+#正在下载漫画的总页数
+DownloadingPage=0

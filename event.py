@@ -12,12 +12,16 @@ page=None
 tree=None
 mself=None
 mpica=None
+#一些状态标识量
 threadaState=0
 setboxState=0
 aboutState=0
 downloadThred=None
+#下载的两个下载状态组件列表
 DownloadStateList=()
 isStartDownload=1
+#正在下载中的那个漫画列组件
+downloadingList=None
 
 #获取pica类
 def getPica():
@@ -34,7 +38,6 @@ def printl(text):
 #-----列表控制-----
 def insertList(data):
     tree.insert_tv(data)
-
 #-----配置设置-----
 
 #将配置导入全局设置
@@ -250,13 +253,16 @@ def downloadSelected():
     refresh()
     mpica.putSelectPicToList(tree.getSelected())
     refreshStatus(True if isStartDownload==1 else False)
+    tree.cancelAll()
     refresh()
 
 #刷新列表下载状态
 def refresh():
+    global downloadingList
     for item in tree.getTree().get_children():
         tem=tree.getTree().set(item,'id')
         if tem==getdowning(): 
+            downloadingList=item
             tree.getTree().set(item,'状态','下载中...')
         elif isDownloaded(tem):
             tree.getTree().set(item,'状态','已下载')
@@ -264,6 +270,10 @@ def refresh():
             tree.getTree().set(item,'状态','等待下载')
         else:
             tree.getTree().set(item,'状态','未下载')
+
+#刷新下载中的百分比
+def refreshRate(rate):
+    tree.getTree().set(downloadingList,'状态',str(rate)+'%')
 
 def close():
     downloadThred.stop()

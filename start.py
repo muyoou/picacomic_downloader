@@ -9,16 +9,27 @@ root = Tk()
 root.iconbitmap(".\\icon\\favicon.ico")
 root.resizable(0,0)
 root.title("哔咔收藏夹下载")
-root.geometry("800x560")
+screenWidth=root.winfo_screenwidth()
+screenHeight=root.winfo_screenheight()
+x=(screenWidth-800)/2
+y=(screenHeight-560)/2
+root.geometry("800x560+%d+%d"%(x,y))
 root.protocol("WM_DELETE_WINDOW",event.close)
 
 toolBar = Frame(root)
 toolBar.pack(fill=X)
-Button(toolBar,text="刷新",borderwidth=0,activeforeground="SkyBlue",padx=5,width=5,height=2,command=event.huoqu).pack(side=LEFT)
-Button(toolBar,text="打开下载文件夹",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.openfolder).pack(side=LEFT)
-Button(toolBar,text="设置",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.openMenu).pack(side=LEFT)
-Button(toolBar,text="下载选中",borderwidth=0,activeforeground="SkyBlue",padx=5,height=2,command=event.downloadSelected).pack(side=LEFT)
-Button(toolBar,text="关于",borderwidth=0,activeforeground="SkyBlue",padx=10,height=2,command=event.openAbout).pack(side=RIGHT)
+downloadIcon=PhotoImage(file=".\\icon\\download.gif")
+refreshIcon=PhotoImage(file=".\\icon\\refresh.gif")
+cancerIcon=PhotoImage(file=".\\icon\\close.gif")
+infoIcon=PhotoImage(file=".\\icon\\info.gif")
+filterIcon=PhotoImage(file=".\\icon\\filter.gif")
+imageIcon=PhotoImage(file=".\\icon\\image.gif")
+Button(toolBar,text="刷新",borderwidth=0,activeforeground="LightCoral",padx=5,height=40,command=event.huoqu,image=refreshIcon,compound=LEFT).pack(side=LEFT)
+Button(toolBar,text="已下载",borderwidth=0,activeforeground="LightCoral",padx=9,height=10,command=event.openfolder,image=imageIcon,compound=LEFT).pack(side=RIGHT)
+Button(toolBar,text="设置",borderwidth=0,activeforeground="LightCoral",padx=5,height=10,command=event.openMenu,image=filterIcon,compound=LEFT).pack(side=RIGHT)
+Button(toolBar,text="下载",borderwidth=0,activeforeground="LightCoral",padx=5,height=10,command=event.downloadSelected,image=downloadIcon,compound=LEFT).pack(side=LEFT)
+Button(toolBar,text="取消下载",borderwidth=0,activeforeground="LightCoral",padx=5,height=10,command=event.downloadSelected,image=cancerIcon,compound=LEFT).pack(side=LEFT)
+Button(toolBar,text="关于",borderwidth=0,activeforeground="LightCoral",padx=10,height=10,command=event.openAbout,image=infoIcon,compound=LEFT).pack(side=RIGHT)
 tree_date=mTreeList.My_Tk(root)
 pageSetBar=Frame(root)
 pageSetBar.pack(fill=X)
@@ -39,6 +50,7 @@ pageBar=Frame(root)
 pageBar.place(relwidth=1,height=160,relx=1,rely=1,anchor="se")
 logT=Text(pageBar,bg="black",fg="white")
 logT.place(relwidth=1,height=150,relx=1,rely=1,anchor="se")
+
 event.tree=tree_date
 event.DownloadStateList=DownloadStateList
 event.log=logT
@@ -53,4 +65,5 @@ event.checkConfig()
 event.printl("配置完成")
 
 event.download()
+
 root.mainloop()

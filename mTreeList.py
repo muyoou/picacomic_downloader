@@ -71,7 +71,7 @@ class My_Tk():
         # import tkinter.font as tkFont
         # ft = tkFont.Font(family='Fixdsys', size=20, weight=tkFont.BOLD)
         self.tv.tag_configure('oddrow')                    #设定treeview里字体格式font=ft
-        self.tv.tag_configure('select', background='SkyBlue')#当对应的按钮被打勾，那么对于的行背景颜色改变！
+        self.tv.tag_configure('select', background='LightPink')#当对应的按钮被打勾，那么对于的行背景颜色改变！
         self.rowheight=27                                       #很蛋疼，好像tkinter里只能用整数！
         Style().configure('Treeview', rowheight=self.rowheight)      #设定每一行的高度
  
@@ -160,6 +160,11 @@ class My_Tk():
                 break
         else:
             self.all_buttonvar.set(1)
+
+    def cancelAll(self):
+        for item,[button] in self.orm.items():
+            button.deselect()
+            self.tv.item(item, tags='oddrow')
 
     def getSelected(self):
         tmp=1

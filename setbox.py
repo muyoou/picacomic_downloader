@@ -10,10 +10,12 @@ class setbox ():
         self.event=event
         self.root=root
         self.event.setboxState=1
-        x = root.winfo_x()
-        y = root.winfo_y()
+        screenWidth=root.winfo_screenwidth()
+        screenHeight=root.winfo_screenheight()
+        x=(screenWidth-270)/2
+        y=(screenHeight-230)/2
         t2 = Toplevel(self.root)
-        t2.geometry("270x230+%d+%d"%(x+150,y+100))
+        t2.geometry("270x230+%d+%d"%(x,y))
         t2.title("设置") 
         t2.transient(self.root)
         t2.resizable(0,0)

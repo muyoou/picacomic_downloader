@@ -39,6 +39,8 @@ class pica():
         S.savePath = None
         #下载列表
         S.dolwnloadList=[]
+        #当前的下载百分比
+        S.dolwnloadRate=0
         S.event.printl("初始化完成")
 
     #用于尝试使用token和密码登录
@@ -151,6 +153,8 @@ class pica():
         for picture in self.allCPageInfo['docs']:
             self.event.printl('- '+str(picnum)+'/'+str(self.allCPageInfo['total'])+' -- '+str(picture['media']['originalName']))
             self.getPic(picture['media'],self.getPicSavePath(self.saveRootPath,picnum,picture['media']))
+            self.dolwnloadRate=int(picnum/d.DownloadingPage*100)
+            self.event.refreshRate(self.dolwnloadRate)
             picnum+=1
 
     #直接下载一个章节中的所有图片
@@ -201,7 +205,11 @@ class pica():
     def downloadFirstComic(self):
         self.comicInfo=self.dolwnloadList[0]
         self.event.fristStartDownload()
+        #初始化类中的下载数据
         d.Downloading=self.comicInfo['_id']
+        d.DownloadingPage=self.comicInfo['pagesCount']
+        self.dolwnloadingNum=0
+        self.dolwnloadRate=0
         self.event.refresh()
         self.allEpsInfo=self.getComicEps()
         self.getComicPic()
